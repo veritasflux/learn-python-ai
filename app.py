@@ -3,8 +3,9 @@ from openai import OpenAI
 import os
 from groq import Groq
 
+client = Groq()
 def get_ai_suggestion(user_input):
-    client = Groq()
+
     completion = client.chat.completions.create(
         model="deepseek-r1-distill-llama-70b",
         messages=[
