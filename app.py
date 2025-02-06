@@ -17,6 +17,7 @@ def get_ai_suggestion(user_input):
     ```
     If code correct, give back the code with congratulation and explanation of the function use.
     If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
+    Always use "```python" for code output.
     """
     response = client.chat.completions.create(
         model="deepseek-ai/DeepSeek-R1", 
