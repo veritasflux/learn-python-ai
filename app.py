@@ -2,9 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import os
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+# Set Huggingface API key
 client = OpenAI(
 	base_url="https://huggingface.co/api/inference-proxy/together",
 	api_key=os.getenv("HUGGING_API_KEY")
