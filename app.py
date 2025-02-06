@@ -23,7 +23,7 @@ def get_ai_suggestion(user_input):
     	messages=[{"role": "user", "content": prompt}],
     	max_tokens=500
   )
-    return response.choices[0].message
+    return response.choices[0].message.content
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
