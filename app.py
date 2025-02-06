@@ -62,7 +62,7 @@ if st.button("Get AI Suggestion"):
     st.code(code_suggestion, language='python')
     if explanation:
         st.write("### Explanation:")
-        st.write(explanation)
+        st.markdown(explanation)
 
 # Section 3: Quiz
 st.write("### Quick Quiz")
