@@ -1,31 +1,39 @@
 import streamlit as st
 from openai import OpenAI
 import os
-
-# Set Huggingface API key
-client = OpenAI(
-    base_url="https://huggingface.co/api/inference-proxy/together",
-    api_key=os.getenv("HUGGING_API_KEY")
-)
+from groq import Groq
 
 def get_ai_suggestion(user_input):
-    prompt = f"""You are a helpful AI tutor for Python beginners.
-    The user is learning Python and provided the following incomplete or incorrect code:
-    
-    ```python
-    {user_input}
-    ```
-
-    Please complete or correct this code in a simple way, and explain briefly why.
-    """
-    response = client.chat.completions.create(
-        model="deepseek-ai/DeepSeek-R1", 
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=500
+    client = Groq()
+    completion = client.chat.completions.create(
+        model="deepseek-r1-distill-llama-70b",
+        messages=[
+            {
+                "role": "system",
+                "content": f"""You are a helpful AI tutor for Python beginners.
+                            The user is learning Python and provided the following incomplete or incorrect code:
+                            
+                            ```python
+                            {user_input}
+                            ```
+                        
+                            Please complete or correct this code in a simple way, and explain briefly why.
+                            """
+            },
+            {
+                "role": "user",
+                "content": {user_input}
+            }
+        ],
+        temperature=0.6,
+        max_completion_tokens=4096,
+        top_p=0.95,
+        stream=True,
+        stop=None,
     )
     
     # Extracting only the relevant response and ensuring it fits within the UI
-    suggestion = response.choices[0].message.content
+    suggestion = completion.choices[0].message.content
     suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
     return suggestion
 
