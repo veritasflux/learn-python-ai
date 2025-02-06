@@ -13,23 +13,23 @@ def get_ai_suggestion(user_input):
                 "role": "system",
                 "content": f"""You are a helpful AI tutor for Python beginners.
                             The user is learning Python and provided the following incomplete or incorrect code:
-                            
-                            ```python
-                            {user_input}
-                            ```
                         
                             Please complete or correct this code in a simple way, and explain briefly why.
                             """
             },
             {
                 "role": "user",
-                "content": {user_input}
+                "content":   f"""
+                            ```python
+                            {user_input}
+                            ```
+                            """
             }
         ],
         temperature=0.6,
         max_completion_tokens=4096,
         top_p=0.95,
-        stream=True,
+        stream=None,
         stop=None,
     )
     
