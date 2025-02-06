@@ -10,14 +10,13 @@ client = OpenAI(
 
 def get_ai_suggestion(user_input):
     prompt = f"""You are a helpful AI tutor for Python beginners.
-    The user is learning Python and provided the following code, which may be correct, incomplete or incorrect:
+    The user is learning Python and provided the following incomplete or incorrect code:
     
     ```python
     {user_input}
     ```
-    If code correct, give back the code with congratulation and explanation of the function use.
-    If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
-    Always use "```python" for code output.
+
+    Please complete or correct this code in a simple way, and explain briefly why.
     """
     response = client.chat.completions.create(
         model="deepseek-ai/DeepSeek-R1", 
@@ -28,17 +27,7 @@ def get_ai_suggestion(user_input):
     # Extracting only the relevant response and ensuring it fits within the UI
     suggestion = response.choices[0].message.content
     suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
-    
-    # Split code and explanation
-    lines = suggestion.split("```python")
-    if len(lines) > 1:
-        code_part = lines[1].split("```", 1)[0].strip()
-        explanation_part = lines[-1].strip()
-    else:
-        code_part = suggestion.strip()
-        explanation_part = ""
-    
-    return code_part, explanation_part
+    return suggestion
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
@@ -57,12 +46,9 @@ st.write("Now, try writing your own print statement below!")
 user_code = st.text_area("Write Python code:", "print(")
 
 if st.button("Get AI Suggestion"):
-    code_suggestion, explanation = get_ai_suggestion(user_code)
+    suggestion = get_ai_suggestion(user_code)
     st.write("### AI Suggestion:")
-    st.code(code_suggestion, language='python')
-    if explanation:
-        st.write("### Explanation:")
-        st.markdown(explanation)
+    st.markdown(suggestion, language='python')
 
 # Section 3: Quiz
 st.write("### Quick Quiz")
