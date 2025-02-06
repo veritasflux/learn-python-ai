@@ -4,8 +4,8 @@ import os
 
 # Set Huggingface API key
 client = OpenAI(
-	base_url="https://huggingface.co/api/inference-proxy/together",
-	api_key=os.getenv("HUGGING_API_KEY")
+    base_url="https://huggingface.co/api/inference-proxy/together",
+    api_key=os.getenv("HUGGING_API_KEY")
 )
 
 def get_ai_suggestion(user_input):
@@ -19,11 +19,15 @@ def get_ai_suggestion(user_input):
     Please complete or correct this code in a simple way, and explain briefly why.
     """
     response = client.chat.completions.create(
-    	model="deepseek-ai/DeepSeek-R1", 
-    	messages=[{"role": "user", "content": prompt}],
-    	max_tokens=500
-  )
-    return response.choices[0].message.content
+        model="deepseek-ai/DeepSeek-R1", 
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
+    )
+    
+    # Extracting only the relevant response and ensuring it fits within the UI
+    suggestion = response.choices[0].message.content
+    suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
+    return suggestion
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
@@ -61,4 +65,3 @@ if st.button("Submit Answer"):
 
 st.write("### AI-Powered Help")
 st.write("💡 If you're stuck, the AI will suggest corrections!")
-
