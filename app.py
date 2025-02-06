@@ -28,7 +28,8 @@ st.write("Try writing your own code below:")
 user_code = st.text_area("Write Python code:", "print(")
 
 if st.button("Get AI Suggestion"):
-    suggestion = query({"inputs: " + user_code})
+    suggestion = query({'"inputs: "' + '"' + user_code + '"'})
+    st.write(suggestion)
     st.write("### AI Suggestion:")
     st.code(suggestion, language='python')
 
