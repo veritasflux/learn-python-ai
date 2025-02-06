@@ -57,7 +57,7 @@ user_code = st.text_area("Write Python code:", "print(")
 if st.button("Get AI Suggestion"):
     suggestion = get_ai_suggestion(user_code)
     st.write("### AI Suggestion:")
-    st.markdown(suggestion, language='python')
+    st.markdown(suggestion)
 
 # Section 3: Quiz
 st.write("### Quick Quiz")
