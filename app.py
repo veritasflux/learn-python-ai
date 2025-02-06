@@ -1,37 +1,67 @@
 import streamlit as st
-import requests
+from openai import OpenAI
 import os
 
-API_URL = "https://api-inference.huggingface.co/models/bigcode/starcoder"
-headers = {"Authorization": "Bearer " + os.getenv("HUGGING_API_KEY")}
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
+client = OpenAI(
+	base_url="https://huggingface.co/api/inference-proxy/together",
+	api_key=os.getenv("HUGGING_API_KEY")
+)
+
+def get_ai_suggestion(user_input):
+    prompt = f"""You are a helpful AI tutor for Python beginners.
+    The user is learning Python and provided the following incomplete or incorrect code:
+    
+    ```python
+    {user_input}
+    ```
+
+    Please complete or correct this code in a simple way, and explain briefly why.
+    """
+    response = client.chat.completions.create(
+    	model="deepseek-ai/DeepSeek-R1", 
+    	messages=messages, 
+    	max_tokens=500
+  )
+  
+    return response["choices"][0]["message"]["content"]
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
 st.subheader("Introduction to Python")
 
-st.write("Python is a popular programming language. Let's start with a simple command:")
+# Section 1: Welcome Message
+st.write("Welcome to your first Python lesson! Python is a powerful and beginner-friendly programming language used in web development, data science, AI, and more.")
+
+# Section 2: First Python Program
+st.write("### Your First Python Program")
+st.write("To display text in Python, we use the `print()` function. Try running this:")
 st.code('print("Hello, world!")', language='python')
 
-st.write("Try writing your own code below:")
+# User Experiment: Writing Print Statements
+st.write("Now, try writing your own print statement below!")
 user_code = st.text_area("Write Python code:", "print(")
 
 if st.button("Get AI Suggestion"):
-    instruction = "Complete with simple Python code: "
-    payload = {"inputs": instruction + user_code}
-    response = query(payload)
-    
-    # Extract the response correctly
-    if isinstance(response, list) and "generated_text" in response[0]:
-        suggestion = response[0]["generated_text"]
-    else:
-        suggestion = "Error: Unable to generate text"
-
+    suggestion = get_ai_suggestion(user_code)
     st.write("### AI Suggestion:")
     st.code(suggestion, language='python')
 
+# Section 3: Quiz
+st.write("### Quick Quiz")
+st.write("Which of the following prints 'Hello, world!' correctly?")
+quiz_options = ["print(Hello, world!)", "print(\"Hello, world!\")", "echo 'Hello, world!'"]
+correct_answer = "print(\"Hello, world!\")"
+user_answer = st.radio("Select the correct option:", quiz_options)
+
+if st.button("Submit Answer"):
+    if user_answer == correct_answer:
+        st.success("✅ Correct! Great job!")
+    else:
+        st.error("❌ Not quite! Remember, Python requires quotes around strings.")
+
 st.write("### AI-Powered Help")
 st.write("💡 If you're stuck, the AI will suggest corrections!")
+
