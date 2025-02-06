@@ -20,7 +20,7 @@ st.write("Try writing your own code below:")
 user_code = st.text_area("Write Python code:", "print(")
 
 if st.button("Get AI Suggestion"):
-    payload = {"inputs": user_code}
+    payload = {"inputs" : "Complete with simple example python code :" user_code}
     response = query(payload)
     
     # Extract the response correctly
