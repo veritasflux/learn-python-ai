@@ -3,7 +3,7 @@ from openai import OpenAI
 import os
 from groq import Groq
 
-client = Groq()
+client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
 def get_ai_suggestion(user_input):
 
     completion = client.chat.completions.create(
