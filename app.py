@@ -20,7 +20,7 @@ def get_ai_suggestion(user_input):
     """
     response = client.chat.completions.create(
     	model="deepseek-ai/DeepSeek-R1", 
-    	messages=messages, 
+    	messages=[{"role": "user", "content": prompt}],
     	max_tokens=500
   )
   
