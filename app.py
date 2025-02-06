@@ -27,7 +27,17 @@ def get_ai_suggestion(user_input):
     # Extracting only the relevant response and ensuring it fits within the UI
     suggestion = response.choices[0].message.content
     suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
-    return suggestion
+    
+    # Split code and explanation
+    lines = suggestion.split("```python")
+    if len(lines) > 1:
+        code_part = lines[1].split("```", 1)[0].strip()
+        explanation_part = lines[-1].strip()
+    else:
+        code_part = suggestion.strip()
+        explanation_part = ""
+    
+    return code_part, explanation_part
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
@@ -46,9 +56,12 @@ st.write("Now, try writing your own print statement below!")
 user_code = st.text_area("Write Python code:", "print(")
 
 if st.button("Get AI Suggestion"):
-    suggestion = get_ai_suggestion(user_code)
+    code_suggestion, explanation = get_ai_suggestion(user_code)
     st.write("### AI Suggestion:")
-    st.code(suggestion, language='python')
+    st.code(code_suggestion, language='python')
+    if explanation:
+        st.write("### Explanation:")
+        st.write(explanation)
 
 # Section 3: Quiz
 st.write("### Quick Quiz")
