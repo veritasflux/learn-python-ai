@@ -12,9 +12,9 @@ def get_ai_suggestion(user_input):
             {
                 "role": "system",
                 "content": f"""You are a helpful AI tutor for Python beginners.
-                            The user is learning Python and provided the following incomplete or incorrect code:
-                        
-                            Please complete or correct this code in a simple way, and explain briefly why.
+                            The user is learning Python and provided the following code, which may be correct, incomplete or incorrect code:
+                            If code correct, congratulate and explain briefly.
+                            If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
                             """
             },
             {
