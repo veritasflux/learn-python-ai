@@ -10,13 +10,13 @@ client = OpenAI(
 
 def get_ai_suggestion(user_input):
     prompt = f"""You are a helpful AI tutor for Python beginners.
-    The user is learning Python and provided the following incomplete or incorrect code:
+    The user is learning Python and provided the following code, which may be correct, incomplete or incorrect:
     
     ```python
     {user_input}
     ```
-
-    Please complete or correct this code in a simple way, and explain briefly why.
+    If code correct, give back the code with congratulation and explanation of the function use.
+    If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
     """
     response = client.chat.completions.create(
         model="deepseek-ai/DeepSeek-R1", 
