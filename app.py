@@ -1,5 +1,6 @@
 import streamlit as st
 from transformers import pipeline
+
 def get_ai_suggestion(user_input):
     generator = pipeline("text-generation", model="bigcode/starcoder")
     response = generator(f"Correct this Python code: {user_input}", max_length=50)
