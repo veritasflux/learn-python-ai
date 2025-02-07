@@ -7,7 +7,7 @@ client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
 
 def get_ai_suggestion(user_input):
     completion = client.chat.completions.create(
-        model="deepseek-r1-distill-llama-70b",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "system",
@@ -50,7 +50,9 @@ def generate_exercise():
         temperature=0.7,
         max_completion_tokens=200,
     )
-    return completion.choices[0].message.content
+    gen_exercise = completion.choices[0].message.content
+    gen_exercise = gen_exercise.split("</think>")[-1].strip()  # Remove <think> section if present
+    return gen_exercise.choices[0].message.content
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
