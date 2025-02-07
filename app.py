@@ -3,6 +3,7 @@ from openai import OpenAI
 import os
 from groq import Groq
 import io
+import sys
 
 
 client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
