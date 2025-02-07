@@ -11,13 +11,13 @@ def generate_lesson():
         messages=[
             {
                 "role": "system",
-                "content": f"""Create an interactive Python lesson for beginners, including explanations and coding examples
+                "content": f"""Create an interactive Python lesson for beginners, including explanations and coding examples. Do not generate exercise.
                             """
             },
             {
                 "role": "user",
                 "content":   f"""
-                            Lesson about print statement
+                            Lesson about python in general and print statement
                             """
             }
         ],
