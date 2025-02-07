@@ -2,6 +2,8 @@ import streamlit as st
 from openai import OpenAI
 import os
 from groq import Groq
+import io
+
 
 client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
 
@@ -88,11 +90,17 @@ st.write("Now, try solving the exercise below!")
 user_code = st.text_area("Write your Python code:", "")
 
 if st.button("Run Code"):
+    old_stdout = sys.stdout
+    sys.stdout = io.StringIO()  # Redirect stdout to capture output
     try:
-        exec(user_code)
+        exec(user_code, {})  # Execute user code
+        output = sys.stdout.getvalue()  # Get printed output
         st.success("✅ Your code ran successfully!")
+        st.code(output, language="text")  # Show output
     except Exception as e:
         st.error(f"❌ Error: {str(e)}")
+    finally:
+        sys.stdout = old_stdout  # Reset stdout
 
 if st.button("Get AI Suggestion"):
     suggestion = get_ai_suggestion(user_code)
