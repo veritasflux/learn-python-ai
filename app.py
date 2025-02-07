@@ -4,6 +4,31 @@ import os
 from groq import Groq
 
 client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
+def generate_lesson(user_input):
+    completion = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "system",
+                "content": f"""Create an interactive Python lesson for beginners, including explanations and coding examples
+                            """
+            },
+            {
+                "role": "user",
+                "content":   f"""
+                            Lesson about print statement
+                            """
+            }
+        ],
+        temperature=0.6,
+        max_completion_tokens=4096,
+        top_p=0.95,
+        stream=None,
+        stop=None,
+    )
+    
+
+    return completion.choices[0].message.content
 
 def get_ai_suggestion(user_input):
     completion = client.chat.completions.create(
@@ -33,10 +58,7 @@ def get_ai_suggestion(user_input):
         stop=None,
     )
     
-    # Extracting only the relevant response and ensuring it fits within the UI
-    suggestion = completion.choices[0].message.content
-    suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
-    return suggestion
+    return completion.choices[0].message.content
 
 def generate_exercise():
     completion = client.chat.completions.create(
@@ -55,16 +77,7 @@ def generate_exercise():
     return gen_exercise
 
 # Streamlit UI
-st.title("Python AI Learning - Lesson 1")
-st.subheader("Introduction to Python")
-
-# Section 1: Welcome Message
-st.write("Welcome to your first Python lesson! Python is a powerful and beginner-friendly programming language used in web development, data science, AI, and more.")
-
-# Section 2: First Python Program
-st.write("### Your First Python Program")
-st.write("To display text in Python, we use the `print()` function. Try running this:")
-st.code('print("Hello, world!")', language='python')
+st.markdown(generate_lesson())
 
 # AI-Generated Exercise
 st.write("### AI-Generated Exercise")
