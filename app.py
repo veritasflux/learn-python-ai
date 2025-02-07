@@ -1,76 +1,87 @@
 import streamlit as st
 from openai import OpenAI
 import os
-from groq import Groq
+import sys
+import io
 
-client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
+# Set Huggingface API key
+client = OpenAI(
+    base_url="https://huggingface.co/api/inference-proxy/together",
+    api_key=os.getenv("HUGGING_API_KEY")
+)
+
 def get_ai_suggestion(user_input):
+    prompt = f"""You are a helpful AI tutor for Python beginners.
+    The user is learning Python and provided the following incomplete or incorrect code:
+    
+    ```python
+    {user_input}
+    ```
 
-    completion = client.chat.completions.create(
-        model="deepseek-r1-distill-llama-70b",
-        messages=[
-            {
-                "role": "system",
-                "content": f"""You are a helpful AI tutor for Python beginners.
-                            The user is learning Python and provided the following code, which may be correct, incomplete or incorrect code:
-                            If code correct, congratulate and explain briefly.
-                            If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
-                            """
-            },
-            {
-                "role": "user",
-                "content":   f"""
-                            ```python
-                            {user_input}
-                            ```
-                            """
-            }
-        ],
-        temperature=0.6,
-        max_completion_tokens=4096,
-        top_p=0.95,
-        stream=None,
-        stop=None,
+    Please complete or correct this code in a simple way, and explain briefly why.
+    """
+    response = client.chat.completions.create(
+        model="deepseek-ai/DeepSeek-R1", 
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
     )
     
     # Extracting only the relevant response and ensuring it fits within the UI
-    suggestion = completion.choices[0].message.content
+    suggestion = response.choices[0].message.content
     suggestion = suggestion.split("</think>")[-1].strip()  # Remove <think> section if present
     return suggestion
+
+def generate_lesson():
+    prompt = "Create an interactive Python lesson for beginners, including explanations and coding examples."
+    response = client.chat.completions.create(
+        model="deepseek-ai/DeepSeek-R1", 
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1000
+    )
+    return response.choices[0].message.content
+
+def generate_exercise():
+    prompt = "Based on the following lesson, create a simple exercise for beginners to practice Python:\n\n" + generate_lesson()
+    response = client.chat.completions.create(
+        model="deepseek-ai/DeepSeek-R1", 
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=500
+    )
+    return response.choices[0].message.content
+
+def execute_code(code):
+    old_stdout = sys.stdout
+    sys.stdout = io.StringIO()
+    try:
+        exec(code, {})
+        output = sys.stdout.getvalue()
+    except Exception as e:
+        output = str(e)
+    sys.stdout = old_stdout
+    return output
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
 st.subheader("Introduction to Python")
 
-# Section 1: Welcome Message
-st.write("Welcome to your first Python lesson! Python is a powerful and beginner-friendly programming language used in web development, data science, AI, and more.")
+# Generate AI-driven lesson
+st.markdown("## Lesson Content")
+st.markdown(generate_lesson())
 
-# Section 2: First Python Program
-st.write("### Your First Python Program")
-st.write("To display text in Python, we use the `print()` function. Try running this:")
-st.code('print("Hello, world!")', language='python')
+# AI-Generated Exercise
+st.markdown("## Try This Exercise")
+st.markdown(generate_exercise())
 
-# User Experiment: Writing Print Statements
-st.write("Now, try writing your own print statement below!")
-user_code = st.text_area("Write Python code:", "print(")
+# User Experiment: Interactive Coding Playground
+st.markdown("## Your Coding Playground")
+user_code = st.text_area("Write your Python code here:", "")
 
-if st.button("Get AI Suggestion"):
+if st.button("Run Code"):
+    output = execute_code(user_code)
+    st.markdown("### Output:")
+    st.code(output, language='text')
+
+if st.button("Ask AI for Help"):
     suggestion = get_ai_suggestion(user_code)
-    st.write("### AI Suggestion:")
-    st.markdown(suggestion)
-
-# Section 3: Quiz
-st.write("### Quick Quiz")
-st.write("Which of the following prints 'Hello, world!' correctly?")
-quiz_options = ["print(Hello, world!)", "print(\"Hello, world!\")", "echo 'Hello, world!'"]
-correct_answer = "print(\"Hello, world!\")"
-user_answer = st.radio("Select the correct option:", quiz_options)
-
-if st.button("Submit Answer"):
-    if user_answer == correct_answer:
-        st.success("✅ Correct! Great job!")
-    else:
-        st.error("❌ Not quite! Remember, Python requires quotes around strings.")
-
-st.write("### AI-Powered Help")
-st.write("💡 If you're stuck, the AI will suggest corrections!")
+    st.markdown("### AI Suggestion:")
+    st.code(suggestion, language='python')
