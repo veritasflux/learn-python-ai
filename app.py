@@ -81,7 +81,6 @@ def generate_exercise():
 st.markdown(generate_lesson())
 
 # AI-Generated Exercise
-st.write("### AI-Generated Exercise")
 st.write(generate_exercise())
 
 # User Experiment: Writing Print Statements
@@ -99,19 +98,3 @@ if st.button("Get AI Suggestion"):
     suggestion = get_ai_suggestion(user_code)
     st.write("### AI Suggestion:")
     st.markdown(suggestion)
-
-# Section 3: Quiz
-st.write("### Quick Quiz")
-st.write("Which of the following prints 'Hello, world!' correctly?")
-quiz_options = ["print(Hello, world!)", "print(\"Hello, world!\")", "echo 'Hello, world!'"]
-correct_answer = "print(\"Hello, world!\")"
-user_answer = st.radio("Select the correct option:", quiz_options)
-
-if st.button("Submit Answer"):
-    if user_answer == correct_answer:
-        st.success("✅ Correct! Great job!")
-    else:
-        st.error("❌ Not quite! Remember, Python requires quotes around strings.")
-
-st.write("### AI-Powered Help")
-st.write("💡 If you're stuck, the AI will suggest corrections!")
