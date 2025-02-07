@@ -70,7 +70,7 @@ def generate_exercise():
         messages=[
             {
                 "role": "system",
-                "content": "Generate a simple Python exercise for beginners based on print statements."
+                "content": "Generate a simple Python exercise for beginners based on print statements. Only give exercise objective and an example of output "
             }
         ],
         temperature=0.7,
