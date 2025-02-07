@@ -7,7 +7,7 @@ import sys
 
 client = Groq(api_key=os.getenv("GROQ_API_TOKEN"))
 
-@st.cache_data  # Cache lesson content
+#@st.cache_data  # Cache lesson content
 def generate_lesson():
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
