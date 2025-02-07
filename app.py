@@ -14,7 +14,7 @@ def generate_lesson():
         messages=[
             {
                 "role": "system",
-                "content": f"""Create an interactive Python lesson for beginners, including explanations and coding examples. Do not generate exercise.
+                "content": f"""Create an interactive Python lesson for beginners, in a funny way, including explanations and coding examples. Do not generate exercise.
                             """
             },
             {
