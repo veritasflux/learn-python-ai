@@ -26,7 +26,7 @@ def generate_lesson():
     )
     return completion.choices[0].message.content
 
-#@st.cache_data  # Cache exercise
+@st.cache_data  # Cache exercise
 def generate_exercise():
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -44,12 +44,10 @@ def generate_exercise():
 # Ensure exercises and lessons are only generated once per session
 if "lesson_content" not in st.session_state:
     st.session_state.lesson_content = generate_lesson()
+if "lesson_content" not in st.session_state:
+    st.session_state.lesson_content = generate_exercise()
 
-if "exercise_prompt" in st.session_state:
-    st.write("✅ Exercise is already stored in session state.")
-else:
-    st.write("⚠️ Exercise not found in session state, generating new exercise...")
-    st.session_state.exercise_prompt = generate_exercise()
+st.markdown(st.session_state.lesson_content)
 
 st.subheader("AI Generated Exercise")
 st.write(st.session_state.exercise_prompt)
