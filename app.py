@@ -85,7 +85,9 @@ def generate_exercise():
     return completion.choices[0].message.content
 
 # Streamlit UI
-st.markdown(generate_lesson())
+if "lesson_content" not in st.session_state:
+    st.session_state.lesson_content = generate_lesson()
+st.markdown(st.session_state.lesson_content)
 
 st.subheader("AI Generated Exercise")
 # Generate and store the exercise
