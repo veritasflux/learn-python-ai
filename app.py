@@ -87,6 +87,7 @@ def generate_exercise():
 # Streamlit UI
 st.markdown(generate_lesson())
 
+st.subheader("AI Generated Exercise")
 # Generate and store the exercise
 if "exercise_prompt" not in st.session_state:
     st.session_state.exercise_prompt = generate_exercise()  # Store in session state
