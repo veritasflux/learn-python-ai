@@ -73,9 +73,9 @@ def generate_exercise():
         temperature=0.7,
         max_completion_tokens=200,
     )
-    gen_exercise = completion.choices[0].message.content
-    gen_exercise = gen_exercise.split("</think>")[-1].strip()  # Remove <think> section if present
-    return gen_exercise
+    #gen_exercise = completion.choices[0].message.content
+    #gen_exercise = gen_exercise.split("</think>")[-1].strip()  # Remove <think> section if present
+    return completion.choices[0].message.content
 
 # Streamlit UI
 st.markdown(generate_lesson())
