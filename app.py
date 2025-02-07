@@ -52,7 +52,7 @@ def generate_exercise():
     )
     gen_exercise = completion.choices[0].message.content
     gen_exercise = gen_exercise.split("</think>")[-1].strip()  # Remove <think> section if present
-    return gen_exercise.choices[0].message.content
+    return gen_exercise
 
 # Streamlit UI
 st.title("Python AI Learning - Lesson 1")
