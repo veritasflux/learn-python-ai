@@ -44,8 +44,9 @@ def generate_exercise():
 # Ensure exercises and lessons are only generated once per session
 if "lesson_content" not in st.session_state:
     st.session_state.lesson_content = generate_lesson()
-if "lesson_content" not in st.session_state:
-    st.session_state.lesson_content = generate_exercise()
+    
+if "exercise_prompt" not in st.session_state:
+    st.session_state.exercise_prompt = generate_exercise()
 
 st.markdown(st.session_state.lesson_content)
 
