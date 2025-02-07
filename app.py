@@ -34,21 +34,26 @@ def generate_lesson():
 
     return completion.choices[0].message.content
 
-def get_ai_suggestion(user_input):
+def get_ai_suggestion(user_input, exercise_prompt):
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "system",
-                "content": f"""You are a helpful AI tutor for Python beginners.
-                            The user is learning Python and provided the following code, which may be correct, incomplete or incorrect code:
-                            If code correct, congratulate and explain briefly.
-                            If code incorrect, please complete or correct this code in a simple way, and explain briefly why.
+                "content": """You are a helpful AI tutor for Python beginners.
+                            The user is attempting to solve a Python exercise.
+                            - First, check if the user's solution matches the requirements of the exercise.
+                            - If the solution is correct, congratulate the user and explain why.
+                            - If the solution is incorrect, provide corrections and explain the mistakes in a simple way.
                             """
             },
             {
                 "role": "user",
-                "content":   f"""
+                "content": f"""
+                            Exercise: 
+                            {exercise_prompt}
+
+                            User's Code:
                             ```python
                             {user_input}
                             ```
@@ -63,7 +68,6 @@ def get_ai_suggestion(user_input):
     )
     
     return completion.choices[0].message.content
-
 def generate_exercise():
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -83,8 +87,10 @@ def generate_exercise():
 # Streamlit UI
 st.markdown(generate_lesson())
 
-# AI-Generated Exercise
-st.write(generate_exercise())
+# Generate and store the exercise
+if "exercise_prompt" not in st.session_state:
+    st.session_state.exercise_prompt = generate_exercise()  # Store in session state
+st.write(st.session_state.exercise_prompt)
 
 # User Experiment: Writing Print Statements
 st.write("Now, try solving the exercise below!")
@@ -104,6 +110,6 @@ if st.button("Run Code"):
         sys.stdout = old_stdout  # Reset stdout
 
 if st.button("Get AI Suggestion"):
-    suggestion = get_ai_suggestion(user_code)
+    suggestion = get_ai_suggestion(user_code, st.session_state.exercise_prompt)
     st.write("### AI Suggestion:")
     st.markdown(suggestion)
