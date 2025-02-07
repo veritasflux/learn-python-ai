@@ -40,7 +40,7 @@ def get_ai_suggestion(user_input):
 
 def generate_exercise():
     completion = client.chat.completions.create(
-        model="deepseek-r1-distill-llama-70b",
+        model="llama-3.3-70b-versatile",
         messages=[
             {
                 "role": "system",
