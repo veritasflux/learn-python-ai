@@ -10,14 +10,18 @@ def generate_prompt(topic, difficulty="beginner"):
     # Modify the prompt to instruct the model to return the exercise in JSON format
     return f"""
     Create a {difficulty} Python exercise about {topic}. 
-    Please provide the following information in a JSON format:
-    {{
-        "question": "The exercise question prompt",
-        "solution": {{
-            "code": "Python code solution",
-            "explanation": "A detailed explanation of the solution"
-        }}
-    }}
+    Your response MUST be a single, valid JSON object starting with { and ending with }. Do not include any text before or after the JSON object.
+    Adhere strictly to the following JSON structure:
+    
+    {
+      "question": "A clear and concise question prompt asking the user to write the Python code.",
+      "solution": {
+        "code": "The complete Python code solution provided as a single JSON string. Ensure all special characters within this code string, such as quotes (\") and newlines (\\n), are correctly escaped.",
+        "explanation": "A step-by-step explanation of the Python code solution, also as a JSON string with proper escaping."
+      }
+    }
+    
+    Ensure the 'code' string is valid Python that directly solves the 'question'.
     """
 
 def get_ai_response(prompt):
