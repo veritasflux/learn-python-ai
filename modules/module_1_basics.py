@@ -1,4 +1,3 @@
-
 import streamlit as st
 from ai_helpers import generate_exercises
 
@@ -10,7 +9,11 @@ def run():
     st.code("x = 5\nprint(x)")
 
     st.subheader("Practice Time!")
-    exercise = generate_exercises.generate_exercise()
-    st.write(exercise["question"])
-    user_input = st.text_input("Your Answer")
 
+    # 👇 Choose the topic you want an exercise about
+    topic = "variables"  # You can also make this dynamic with a selectbox later
+
+    exercise_text = generate_exercises.generate_exercise(topic)
+    st.write(exercise_text)
+
+    user_input = st.text_input("Your Answer")
