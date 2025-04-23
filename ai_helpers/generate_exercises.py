@@ -1,12 +1,24 @@
 import os
 import requests
+import json
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # set this in your environment or .env file
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL_NAME = "llama3-8b-8192"
 
 def generate_prompt(topic, difficulty="beginner"):
-    return f"Create a {difficulty} Python exercise about {topic}, and provide a clear explanation for the answer."
+    # Modify the prompt to instruct the model to return the exercise in JSON format
+    return f"""
+    Create a {difficulty} Python exercise about {topic}. 
+    Please provide the following information in a JSON format:
+    {{
+        "question": "The exercise question prompt",
+        "solution": {{
+            "code": "Python code solution",
+            "explanation": "A detailed explanation of the solution"
+        }}
+    }}
+    """
 
 def get_ai_response(prompt):
     headers = {
@@ -21,7 +33,12 @@ def get_ai_response(prompt):
 
     response = requests.post(GROQ_API_URL, headers=headers, json=body)
     if response.status_code == 200:
-        return response.json()["choices"][0]["message"]["content"]
+        try:
+            # Attempt to parse the response as JSON
+            ai_response = response.json()["choices"][0]["message"]["content"]
+            return json.loads(ai_response)  # Parse the string into a JSON object
+        except json.JSONDecodeError:
+            return f"Error: Response is not in valid JSON format."
     else:
         return f"Error: {response.status_code} - {response.text}"
 
