@@ -10,7 +10,7 @@ def run():
     st.code("x = 5\nprint(x)")
 
     st.subheader("Practice Time!")
-    exercise = generate_exercises.basic_variable_exercise()
+    exercise = generate_exercises.generate_exercise()
     st.write(exercise["question"])
     user_input = st.text_input("Your Answer")
 
