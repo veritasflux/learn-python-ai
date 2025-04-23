@@ -37,6 +37,7 @@ def get_ai_response(prompt):
         try:
             # Attempt to parse the response as JSON
             ai_response = response.json()["choices"][0]["message"]["content"]
+            print(ai_response)
             return json.loads(ai_response)  # Parse the string into a JSON object
         except json.JSONDecodeError:
             return f"Error: Response is not in valid JSON format."
