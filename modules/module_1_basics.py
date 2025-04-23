@@ -9,11 +9,16 @@ def run():
     st.code("x = 5\nprint(x)")
 
     st.divider()
-
     st.subheader("🧪 Practice Time!")
 
     topic = "variables"
-    full_exercise = generate_exercises.generate_exercise(topic)
+
+    # Store the same exercise in session_state
+    if "exercise_text" not in st.session_state:
+        full_exercise = generate_exercises.generate_exercise(topic)
+        st.session_state.exercise_text = full_exercise
+
+    full_exercise = st.session_state.exercise_text
 
     # Split question from solution
     if "Solution:" in full_exercise:
@@ -23,9 +28,9 @@ def run():
 
     st.markdown(question.strip())
 
-    user_input = st.text_input("Your Answer", placeholder="Type your solution or notes here...")
-
-    if user_input.strip():
+    user_input = st.text_area("Your Answer", height=100)
+    if st.button("✅ Submit"):
+        st.success("Your answer has been submitted!")
         with st.expander("💡 Show Solution & Explanation"):
             st.markdown("**Solution:**")
             st.markdown(solution.strip())
