@@ -9,11 +9,22 @@ def run():
     st.code("x = 5\nprint(x)")
 
     st.subheader("Practice Time!")
+    topic = "variables"
+    
+    # Get full content (including solution/explanation)
+    full_exercise = generate_exercises.generate_exercise(topic)
 
-    # 👇 Choose the topic you want an exercise about
-    topic = "variables"  # You can also make this dynamic with a selectbox later
+    # Split content into parts
+    split_sections = full_exercise.split("Solution:")
+    question = split_sections[0].strip()
+    solution_and_explanation = "Solution:" + split_sections[1].strip() if len(split_sections) > 1 else ""
 
-    exercise_text = generate_exercises.generate_exercise(topic)
-    st.write(exercise_text)
+    # Show only the exercise first
+    st.write(question)
 
     user_input = st.text_input("Your Answer")
+
+    # Show solution after user submits something
+    if user_input:
+        with st.expander("See the suggested solution and explanation"):
+            st.markdown(solution_and_explanation)
