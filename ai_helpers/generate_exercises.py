@@ -29,6 +29,7 @@ def get_ai_response(prompt):
         "model": MODEL_NAME,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
+        "response_format": {"type": "json_object"},
     }
 
     response = requests.post(GROQ_API_URL, headers=headers, json=body)
