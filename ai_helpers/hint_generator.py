@@ -7,19 +7,29 @@ MODEL_NAME = "llama-3.3-70b-versatile"
 
 def generate_hint(user_code, solution_code):
     prompt = f"""
-    The user submitted this Python code:
-    {user_code}
-
-    The correct solution is:
-    {solution_code}
-
-    Please analyze the user code. If it's incorrect:
-    - Explain what the user did wrong.
-    - Provide a small hint (do NOT reveal the full solution).
-    - If possible, include a short correction suggestion (not full code).
-
-    Return only helpful guidance, like a Python tutor would.
-    """
+            You are an expert Python tutor helping students learn by doing.
+            
+            The student submitted this code:
+            \"\"\"
+            {user_code}
+            \"\"\"
+            
+            The expected solution is:
+            \"\"\"
+            {solution_code}
+            \"\"\"
+            
+            Your job:
+            1. Determine whether the student's code is logically and syntactically correct.
+            2. If it's correct but structured differently (e.g. variable names or formatting), praise the logic and provide optional tips.
+            3. If it's incorrect, do NOT reveal the correct solution. Instead:
+               - Gently point out what seems to be going wrong.
+               - Suggest what the student might reconsider.
+               - Give one small tip or question to guide them toward the solution.
+            4. Never provide the full solution.
+            
+            Respond in a friendly and concise tone.
+            """
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
