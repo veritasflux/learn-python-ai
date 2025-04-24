@@ -16,7 +16,7 @@ def run():
 
     topic = "variables"
 
-    # Generate new exercise
+    # Generate exercise
     if "exercise_data" not in st.session_state:
         if st.button("🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
@@ -28,18 +28,24 @@ def run():
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
+    # Show the exercise and editor
     if "exercise_data" in st.session_state:
         st.markdown("### 📝 Exercise")
         st.markdown(st.session_state.exercise_data["question"])
 
         st.markdown("### ✏️ Try It Out!")
-        user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
+        user_code = st.text_area(
+            "Write your Python code here:",
+            value=st.session_state.get("user_input", ""),
+            height=180,
+            key="user_code_input"
+        )
 
-        # Run Code
+        # Run and evaluate code
         if st.button("🚀 Run My Code"):
             st.session_state.user_input = user_code
             st.session_state.last_run_code = user_code
-        
+
             output_buffer = io.StringIO()
             try:
                 with contextlib.redirect_stdout(output_buffer):
@@ -52,18 +58,18 @@ def run():
                 st.error("⚠️ Error in your code:")
                 st.code(str(e))
                 user_code_valid = False
-        
-            # Evaluate correctness using hint_generator
+
+            # Use AI to evaluate logic
             if user_code_valid:
                 with st.spinner("Evaluating your solution..."):
-                    user_code = st.session_state["last_run_code"]
-                    solution_code = st.session_state["exercise_data"]["solution"]["code"]
+                    solution_code = st.session_state.exercise_data["solution"]["code"]
                     hint = hint_generator.generate_hint(user_code, solution_code)
-        
+
                 if "correct" in hint.lower() and "wrong" not in hint.lower():
                     st.success("🎉 Congratulations! Your solution is logically correct.")
                 else:
                     st.info(f"💡 Hint: {hint}")
+
         st.divider()
 
         # Reveal solution
