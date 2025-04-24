@@ -53,17 +53,17 @@ def run():
                 st.code(str(e))
                 user_code_valid = False
         
-        # Evaluate correctness using hint_generator
-        if user_code_valid:
-            with st.spinner("Evaluating your solution..."):
-                user_code = st.session_state["last_run_code"]
-                solution_code = st.session_state["exercise_data"]["solution"]["code"]
-                hint = hint_generator.generate_hint(user_code, solution_code)
-    
-            if "correct" in hint.lower() and "wrong" not in hint.lower():
-                st.success("🎉 Congratulations! Your solution is logically correct.")
-            else:
-                st.info(f"💡 Hint: {hint}")
+            # Evaluate correctness using hint_generator
+            if user_code_valid:
+                with st.spinner("Evaluating your solution..."):
+                    user_code = st.session_state["last_run_code"]
+                    solution_code = st.session_state["exercise_data"]["solution"]["code"]
+                    hint = hint_generator.generate_hint(user_code, solution_code)
+        
+                if "correct" in hint.lower() and "wrong" not in hint.lower():
+                    st.success("🎉 Congratulations! Your solution is logically correct.")
+                else:
+                    st.info(f"💡 Hint: {hint}")
         st.divider()
 
         # Reveal solution
