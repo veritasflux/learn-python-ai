@@ -60,24 +60,24 @@ def run():
                 st.code(str(e))
                 user_code_valid = False
         
-            if user_code_valid:
-                solution_code = st.session_state["exercise_data"]["solution"]["code"]
-                solution_output_buffer = io.StringIO()
-                try:
-                    with contextlib.redirect_stdout(solution_output_buffer):
-                        exec(solution_code, {})
-                    expected_output = solution_output_buffer.getvalue().strip()
-                except Exception as e:
-                    expected_output = None
-                    st.warning("⚠️ Could not evaluate the reference solution.")
+        if user_code_valid:
+            solution_code = st.session_state["exercise_data"]["solution"]["code"]
+            solution_output_buffer = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(solution_output_buffer):
+                    exec(solution_code, {})
+                expected_output = solution_output_buffer.getvalue().strip()
+            except Exception as e:
+                expected_output = None
+                st.warning("⚠️ Could not evaluate the reference solution.")
         
-                if expected_output is not None:
-                    if user_output == expected_output:
-                        st.success("🎉 Congratulations! Your solution is correct.")
-                    else:
-                        with st.spinner("Analyzing your logic..."):
-                            hint = hint_generator.generate_hint(user_code, solution_code)
-                        st.info(f"💡 Hint: {hint}")
+            with st.spinner("Evaluating your logic..."):
+                hint = hint_generator.generate_hint(user_code, solution_code)
+        
+            if "correct" in hint.lower() and "wrong" not in hint.lower():
+                st.success("🎉 Congratulations! Your solution is logically correct.")
+            else:
+                st.info(f"💡 Hint: {hint}")
 
         st.divider()
 
