@@ -85,11 +85,11 @@ def run():
                         
                         if is_correct:
                             st.success("🎉 Congratulations! Your solution is logically correct.")
+                            st.info(f"💡 Hint: {feedback}")
                         else:
                             st.info(f"💡 Hint: {feedback}")
                     except json.JSONDecodeError:
                         st.warning("⚠️ Could not evaluate the feedback properly.")
-                        print(hint_response)
 
         st.divider()
 
