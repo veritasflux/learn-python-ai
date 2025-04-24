@@ -1,5 +1,6 @@
 import streamlit as st
 from ai_helpers import generate_exercises
+from ai_helpers.hint_generator import generate_hint
 
 def run():
     st.title("🧠 Module 1: Python Basics")
@@ -36,6 +37,19 @@ def run():
 
         if st.button("✅ Submit Your Answer"):
             st.session_state.show_solution = True
+            st.session_state.hint_requested = False  # Reset hint flag
+
+        if st.button("💡 Get a Hint"):
+            st.session_state.hint_requested = True
+            with st.spinner("Analyzing your answer..."):
+                user_code = st.session_state.user_input
+                solution_code = st.session_state.exercise_data["solution"]["code"]
+                st.session_state.generated_hint = generate_hint(user_code, solution_code)
+
+        # Show hint if requested
+        if st.session_state.get("hint_requested"):
+            st.markdown("### 🤖 AI Hint")
+            st.info(st.session_state.get("generated_hint", "No hint available."))
 
         # Show solution and explanation
         if st.session_state.get("show_solution"):
@@ -45,4 +59,3 @@ def run():
 
             st.markdown("### 💡 Explanation")
             st.markdown(solution.get("explanation", "No explanation provided."))
-
