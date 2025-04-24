@@ -29,40 +29,40 @@ def run():
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
-# Display the exercise
-if "exercise_data" in st.session_state:
-    st.markdown("### 📝 Exercise")
-    st.markdown(st.session_state.exercise_data["question"])
-
-    st.markdown("### ✏️ Try It Out!")
-    user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
-
-    # Execute code if requested
-    if st.button("🚀 Run My Code"):
-        st.session_state.user_input = user_code
-
-        output_buffer = io.StringIO()
-        try:
-            with contextlib.redirect_stdout(output_buffer):
-                exec(user_code, {})
-            st.success("✅ Code ran successfully!")
-            st.markdown("**🖥️ Output:**")
-            st.code(output_buffer.getvalue())
-        except Exception as e:
-            st.error("⚠️ Error in your code:")
-            st.code(str(e))
-
-    st.divider()
-
-    # Solution reveal button
-    if st.button("💡 I Give Up! Show Solution"):
-        st.session_state.show_solution = True
-
-    # Show solution and explanation
-    if st.session_state.get("show_solution"):
-        solution = st.session_state.exercise_data["solution"]
-        st.markdown("### ✅ Solution Code")
-        st.code(solution.get("code", "No code provided."))
-
-        st.markdown("### 💡 Explanation")
-        st.markdown(solution.get("explanation", "No explanation provided."))
+    # Display the exercise
+    if "exercise_data" in st.session_state:
+        st.markdown("### 📝 Exercise")
+        st.markdown(st.session_state.exercise_data["question"])
+    
+        st.markdown("### ✏️ Try It Out!")
+        user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
+    
+        # Execute code if requested
+        if st.button("🚀 Run My Code"):
+            st.session_state.user_input = user_code
+    
+            output_buffer = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(output_buffer):
+                    exec(user_code, {})
+                st.success("✅ Code ran successfully!")
+                st.markdown("**🖥️ Output:**")
+                st.code(output_buffer.getvalue())
+            except Exception as e:
+                st.error("⚠️ Error in your code:")
+                st.code(str(e))
+    
+        st.divider()
+    
+        # Solution reveal button
+        if st.button("💡 I Give Up! Show Solution"):
+            st.session_state.show_solution = True
+    
+        # Show solution and explanation
+        if st.session_state.get("show_solution"):
+            solution = st.session_state.exercise_data["solution"]
+            st.markdown("### ✅ Solution Code")
+            st.code(solution.get("code", "No code provided."))
+    
+            st.markdown("### 💡 Explanation")
+            st.markdown(solution.get("explanation", "No explanation provided."))
