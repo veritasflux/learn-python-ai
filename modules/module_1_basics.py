@@ -44,7 +44,7 @@ def run():
             with st.spinner("Analyzing your answer..."):
                 user_code = st.session_state.user_input
                 solution_code = st.session_state.exercise_data["solution"]["code"]
-                st.session_state.generated_hint = generate_hint(user_code, solution_code)
+                st.session_state.generated_hint = hint_generator.generate_hint(user_code, solution_code)
 
         # Show hint if requested
         if st.session_state.get("hint_requested"):
