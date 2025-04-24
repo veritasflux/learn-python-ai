@@ -1,6 +1,6 @@
 import streamlit as st
-from ai_helpers import generate_exercises
-from ai_helpers.hint_generator import generate_hint
+from ai_helpers import generate_exercises, hint_generator
+
 
 def run():
     st.title("🧠 Module 1: Python Basics")
