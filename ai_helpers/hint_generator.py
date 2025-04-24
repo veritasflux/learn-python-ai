@@ -21,17 +21,22 @@ def generate_hint(user_code, solution_code):
             
             Your job:
             1. Determine whether the student's code is logically and syntactically correct.
-            2. If it's correct but structured differently (e.g. variable names or formatting), praise the logic and provide optional tips.
+            2. If it's correct but structured differently (e.g., different variable names or formatting), you should still consider it correct. Provide a compliment and optionally suggest minor improvements (e.g., naming clarity).
             3. If it's incorrect, do NOT reveal the correct solution. Instead:
-               - Gently point out what seems to be going wrong.
+               - Gently point out what seems to be wrong.
                - Suggest what the student might reconsider.
-               - Give one small tip or question to guide them toward the solution.
-            4. Never provide the full solution.
-            5. Do not compare exact output values unless necessary.
-            6. Focus on logic and structure of the code.
-            7. Accept different variable names and different constants as long as the logic is sound.
-            8. At the end of analysis, write "wrong" or "correct".
-            Respond in a friendly and concise tone.
+               - Give one small tip or question to guide them toward the correct approach.
+            4. Never reveal the full correct solution.
+            5. Do not require exact output values unless absolutely necessary — focus on logic.
+            6. Accept all different variable names, constants, and formatting styles as long as the logic is valid.
+            7. Output your answer strictly as a JSON object with this format:
+            
+            {{
+              "is_correct": true or false,
+              "feedback": "your explanation or hint here"
+            }}
+            
+            Do not add any commentary or explanation outside the JSON response.
             """
 
     headers = {
