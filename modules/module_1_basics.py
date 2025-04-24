@@ -79,6 +79,7 @@ def run():
                     try:
                         # Parse the response as JSON
                         hint_response = json.loads(hint_json)
+                        print(hint_response)
                         is_correct = hint_response.get("is_correct", False)
                         feedback = hint_response.get("feedback", "No feedback provided.")
                         
