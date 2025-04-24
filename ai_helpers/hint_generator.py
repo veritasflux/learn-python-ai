@@ -27,7 +27,9 @@ def generate_hint(user_code, solution_code):
                - Suggest what the student might reconsider.
                - Give one small tip or question to guide them toward the solution.
             4. Never provide the full solution.
-            
+            5. Do not compare exact output values unless necessary.
+            6. Focus on logic and structure of the code.
+            7. Accept different variable names and different constants as long as the logic is sound.
             Respond in a friendly and concise tone.
             """
 
