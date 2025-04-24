@@ -2,6 +2,7 @@ import streamlit as st
 from ai_helpers import generate_exercises, hint_generator
 import io
 import contextlib
+import json
 
 
 def run():
@@ -72,12 +73,21 @@ def run():
                     st.warning("⚠️ Could not evaluate the reference solution.")
             
                 with st.spinner("Evaluating your logic..."):
-                    hint = hint_generator.generate_hint(user_code, solution_code)
-            
-                if "correct" in hint.lower() and "wrong" not in hint.lower():
-                    st.success("🎉 Congratulations! Your solution is logically correct.")
-                else:
-                    st.info(f"💡 Hint: {hint}")
+                    # Call the hint generator and get feedback as JSON
+                    hint_json = hint_generator.generate_hint(user_code, solution_code)
+
+                    try:
+                        # Parse the response as JSON
+                        hint_response = json.loads(hint_json)
+                        is_correct = hint_response.get("is_correct", False)
+                        feedback = hint_response.get("feedback", "No feedback provided.")
+                        
+                        if is_correct:
+                            st.success("🎉 Congratulations! Your solution is logically correct.")
+                        else:
+                            st.info(f"💡 Hint: {feedback}")
+                    except json.JSONDecodeError:
+                        st.warning("⚠️ Could not evaluate the feedback properly.")
 
         st.divider()
 
