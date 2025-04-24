@@ -36,13 +36,13 @@ def run():
         st.markdown("### ✏️ Try It Out!")
         user_code = st.text_area(
             "Write your Python code here:",
-            value=st.session_state.get("user_input", ""),
             height=180,
             key="user_code_input"
         )
 
         # Run and evaluate code
         if st.button("🚀 Run My Code"):
+            user_code = st.session_state["user_code_input"]  # This holds the text area's content
             st.session_state.user_input = user_code
             st.session_state.last_run_code = user_code
         
