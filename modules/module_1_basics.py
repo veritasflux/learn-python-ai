@@ -45,30 +45,39 @@ def run():
         if st.button("🚀 Run My Code"):
             st.session_state.user_input = user_code
             st.session_state.last_run_code = user_code
-
+        
             output_buffer = io.StringIO()
             try:
                 with contextlib.redirect_stdout(output_buffer):
                     exec(user_code, {})
                 st.success("✅ Code ran successfully!")
+                user_output = output_buffer.getvalue().strip()
                 st.markdown("**🖥️ Output:**")
-                st.code(output_buffer.getvalue())
+                st.code(user_output)
                 user_code_valid = True
             except Exception as e:
                 st.error("⚠️ Error in your code:")
                 st.code(str(e))
                 user_code_valid = False
-
-            # Use AI to evaluate logic
+        
             if user_code_valid:
-                with st.spinner("Evaluating your solution..."):
-                    solution_code = st.session_state.exercise_data["solution"]["code"]
-                    hint = hint_generator.generate_hint(user_code, solution_code)
-
-                if "correct" in hint.lower() and "wrong" not in hint.lower():
-                    st.success("🎉 Congratulations! Your solution is logically correct.")
-                else:
-                    st.info(f"💡 Hint: {hint}")
+                solution_code = st.session_state["exercise_data"]["solution"]["code"]
+                solution_output_buffer = io.StringIO()
+                try:
+                    with contextlib.redirect_stdout(solution_output_buffer):
+                        exec(solution_code, {})
+                    expected_output = solution_output_buffer.getvalue().strip()
+                except Exception as e:
+                    expected_output = None
+                    st.warning("⚠️ Could not evaluate the reference solution.")
+        
+                if expected_output is not None:
+                    if user_output == expected_output:
+                        st.success("🎉 Congratulations! Your solution is correct.")
+                    else:
+                        with st.spinner("Analyzing your logic..."):
+                            hint = hint_generator.generate_hint(user_code, solution_code)
+                        st.info(f"💡 Hint: {hint}")
 
         st.divider()
 
