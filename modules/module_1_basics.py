@@ -38,20 +38,29 @@ def run():
         user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
     
         # Execute code if requested
-        if st.button("🚀 Run My Code"):
-            st.session_state.user_input = user_code
+    if st.button("🚀 Run My Code"):
+        st.session_state.user_input = user_code
+        st.session_state.last_run_code = user_code
     
-            output_buffer = io.StringIO()
-            try:
-                with contextlib.redirect_stdout(output_buffer):
-                    exec(user_code, {})
-                st.success("✅ Code ran successfully!")
-                st.markdown("**🖥️ Output:**")
-                st.code(output_buffer.getvalue())
-            except Exception as e:
-                st.error("⚠️ Error in your code:")
-                st.code(str(e))
+        output_buffer = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(output_buffer):
+                exec(user_code, {})
+            st.success("✅ Code ran successfully!")
+            st.markdown("**🖥️ Output:**")
+            st.code(output_buffer.getvalue())
+        except Exception as e:
+            st.error("⚠️ Error in your code:")
+            st.code(str(e))
     
+        st.session_state.last_run_output = output_buffer.getvalue()
+
+    if "last_run_code" in st.session_state and st.button("🔍 Get a Hint"):
+        with st.spinner("Analyzing your code..."):
+            user_code = st.session_state["last_run_code"]
+            solution_code = st.session_state["exercise_data"]["solution"]["code"]
+            hint = hint_generator.generate_hint(user_code, solution_code)
+            st.info(f"💡 Hint: {hint}")
         st.divider()
     
         # Solution reveal button
