@@ -10,6 +10,10 @@ def generate_prompt(topic, difficulty="beginner"):
     # Modify the prompt to instruct the model to return the exercise in JSON format
     return rf"""
     Create a {difficulty} Python exercise about {topic}. 
+    Make the question dynamic and fresh each time:
+    - Randomize variable values or names
+    - Use small real-world contexts
+    - Build variety (math, strings, lists, etc.)
     Your response MUST be a single, valid JSON object starting with {{ and ending with }}. Do not include any text before or after the JSON object.
     Adhere strictly to the following JSON structure:
     
