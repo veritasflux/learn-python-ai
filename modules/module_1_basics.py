@@ -21,7 +21,6 @@ def run():
         if st.button("🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
                 exercise_data = generate_exercises.generate_exercise(topic)
-
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
                     st.session_state.exercise_data = exercise_data
                     st.session_state.show_solution = False
@@ -29,49 +28,50 @@ def run():
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
-    # Display the exercise
     if "exercise_data" in st.session_state:
         st.markdown("### 📝 Exercise")
         st.markdown(st.session_state.exercise_data["question"])
-    
+
         st.markdown("### ✏️ Try It Out!")
         user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
-    
-        # Execute code if requested
-    if st.button("🚀 Run My Code"):
-        st.session_state.user_input = user_code
-        st.session_state.last_run_code = user_code
-    
-        output_buffer = io.StringIO()
-        try:
-            with contextlib.redirect_stdout(output_buffer):
-                exec(user_code, {})
-            st.success("✅ Code ran successfully!")
-            st.markdown("**🖥️ Output:**")
-            st.code(output_buffer.getvalue())
-        except Exception as e:
-            st.error("⚠️ Error in your code:")
-            st.code(str(e))
-    
-        st.session_state.last_run_output = output_buffer.getvalue()
 
-    if "last_run_code" in st.session_state and st.button("🔍 Get a Hint"):
-        with st.spinner("Analyzing your code..."):
-            user_code = st.session_state["last_run_code"]
-            solution_code = st.session_state["exercise_data"]["solution"]["code"]
-            hint = hint_generator.generate_hint(user_code, solution_code)
-            st.info(f"💡 Hint: {hint}")
+        # Run Code
+        if st.button("🚀 Run My Code"):
+            st.session_state.user_input = user_code
+            st.session_state.last_run_code = user_code
+
+            output_buffer = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(output_buffer):
+                    exec(user_code, {})
+                st.success("✅ Code ran successfully!")
+                st.markdown("**🖥️ Output:**")
+                st.code(output_buffer.getvalue())
+            except Exception as e:
+                st.error("⚠️ Error in your code:")
+                st.code(str(e))
+
+            st.session_state.last_run_output = output_buffer.getvalue()
+
+        # Show hint if code has been run
+        if "last_run_code" in st.session_state:
+            if st.button("🔍 Get a Hint"):
+                with st.spinner("Analyzing your code..."):
+                    user_code = st.session_state["last_run_code"]
+                    solution_code = st.session_state["exercise_data"]["solution"]["code"]
+                    hint = hint_generator.generate_hint(user_code, solution_code)
+                    st.info(f"💡 Hint: {hint}")
+
         st.divider()
-    
-        # Solution reveal button
+
+        # Reveal solution
         if st.button("💡 I Give Up! Show Solution"):
             st.session_state.show_solution = True
-    
-        # Show solution and explanation
+
         if st.session_state.get("show_solution"):
             solution = st.session_state.exercise_data["solution"]
             st.markdown("### ✅ Solution Code")
             st.code(solution.get("code", "No code provided."))
-    
+
             st.markdown("### 💡 Explanation")
             st.markdown(solution.get("explanation", "No explanation provided."))
