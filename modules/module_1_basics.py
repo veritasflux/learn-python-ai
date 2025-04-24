@@ -1,5 +1,7 @@
 import streamlit as st
 from ai_helpers import generate_exercises, hint_generator
+import io
+import contextlib
 
 
 def run():
@@ -27,35 +29,40 @@ def run():
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
-    # Display the exercise
-    if "exercise_data" in st.session_state:
-        st.markdown("### 📝 Exercise")
-        st.markdown(st.session_state.exercise_data["question"])
+# Display the exercise
+if "exercise_data" in st.session_state:
+    st.markdown("### 📝 Exercise")
+    st.markdown(st.session_state.exercise_data["question"])
 
-        # Code input
-        st.session_state.user_input = st.text_area("✏️ Your Answer", value=st.session_state.get("user_input", ""), height=120)
+    st.markdown("### ✏️ Try It Out!")
+    user_code = st.text_area("Write your Python code here:", value=st.session_state.get("user_input", ""), height=180, key="user_code_input")
 
-        if st.button("✅ Submit Your Answer"):
-            st.session_state.show_solution = True
-            st.session_state.hint_requested = False  # Reset hint flag
+    # Execute code if requested
+    if st.button("🚀 Run My Code"):
+        st.session_state.user_input = user_code
 
-        if st.button("💡 Get a Hint"):
-            st.session_state.hint_requested = True
-            with st.spinner("Analyzing your answer..."):
-                user_code = st.session_state.user_input
-                solution_code = st.session_state.exercise_data["solution"]["code"]
-                st.session_state.generated_hint = hint_generator.generate_hint(user_code, solution_code)
+        output_buffer = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(output_buffer):
+                exec(user_code, {})
+            st.success("✅ Code ran successfully!")
+            st.markdown("**🖥️ Output:**")
+            st.code(output_buffer.getvalue())
+        except Exception as e:
+            st.error("⚠️ Error in your code:")
+            st.code(str(e))
 
-        # Show hint if requested
-        if st.session_state.get("hint_requested"):
-            st.markdown("### 🤖 AI Hint")
-            st.info(st.session_state.get("generated_hint", "No hint available."))
+    st.divider()
 
-        # Show solution and explanation
-        if st.session_state.get("show_solution"):
-            solution = st.session_state.exercise_data["solution"]
-            st.markdown("### ✅ Solution Code")
-            st.code(solution.get("code", "No code provided."))
+    # Solution reveal button
+    if st.button("💡 I Give Up! Show Solution"):
+        st.session_state.show_solution = True
 
-            st.markdown("### 💡 Explanation")
-            st.markdown(solution.get("explanation", "No explanation provided."))
+    # Show solution and explanation
+    if st.session_state.get("show_solution"):
+        solution = st.session_state.exercise_data["solution"]
+        st.markdown("### ✅ Solution Code")
+        st.code(solution.get("code", "No code provided."))
+
+        st.markdown("### 💡 Explanation")
+        st.markdown(solution.get("explanation", "No explanation provided."))
