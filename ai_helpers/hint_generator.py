@@ -30,6 +30,7 @@ def generate_hint(user_code, solution_code):
             5. Do not compare exact output values unless necessary.
             6. Focus on logic and structure of the code.
             7. Accept different variable names and different constants as long as the logic is sound.
+            8. At the end of analysis, write "wrong" or "correct".
             Respond in a friendly and concise tone.
             """
 
