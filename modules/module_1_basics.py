@@ -52,7 +52,6 @@ if x == 5:  # correct: comparing
 
 # Cache the explanations in a dictionary
 cached_explanations = {}
-fetch_and_cache_explanations()
 
 def fetch_and_cache_explanations():
     """
@@ -60,7 +59,7 @@ def fetch_and_cache_explanations():
     """
     global cached_explanations
     cached_explanations = generate_slide_explanation.fetch_slide_explanations(slides)
-    
+
 def display_slide(index):
     """
     Display the content and explanation of a specific slide.
@@ -214,6 +213,7 @@ def run():
     module_name = "assigning variables"
     slide_controls()
     st.divider()
+    fetch_and_cache_explanations()
 
     # Only show exercises after the final slide
     if st.session_state.slide_index == len(slides) - 1:
