@@ -19,7 +19,7 @@ def run():
     x = 5
     name = "Alice"
     price = 9.99
-
+    """)
     ---
 
     #### 2. **Visual Output for Variable Values**
