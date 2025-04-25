@@ -27,13 +27,13 @@ def run():
     ```python
     st.markdown("📌 Let's update a variable:")
     
-    st.code("""
+    st.code("
     x = 5
     print("Before:", x)
     
     x = 10
     print("After:", x)
-    """)
+    ")
 
     st.info("
     f"**💡 Common Mistake**"
