@@ -117,13 +117,9 @@ def generate_hint(user_code, solution_code):
         # Call the hint generator and get feedback as JSON
         hint_json = hint_generator.generate_hint(user_code, solution_code)
         
-        # Print the raw hint JSON for debugging purposes
-        st.write("Raw hint JSON:", hint_json)
-        
         try:
             # Parse the response as JSON
             hint_response = json.loads(hint_json)
-            st.write("Parsed hint response:", hint_response)  # For debug purposes
             is_correct = hint_response.get("is_correct", False)
             feedback = hint_response.get("feedback", "No feedback provided.")
             
