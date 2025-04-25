@@ -140,6 +140,8 @@ def run():
                             st.info(f"💡 Hint: {feedback}")
                     except json.JSONDecodeError:
                         st.warning("⚠️ Could not evaluate the feedback properly.")
+                        st.code(hint_json)  # Show raw response for debugging
+
 
         st.divider()
 
