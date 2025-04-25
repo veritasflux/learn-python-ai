@@ -179,8 +179,12 @@ def display_solution(module_name):
         st.markdown(solution.get("explanation", "No explanation provided."))
 
 def run():
+    module_name = "assigning variables"
     slide_controls()
     st.divider()
-    generate_exercise_data("assigning variables")
-    display_exercise("assigning variables")
-    display_solution("assigning variables")
+
+    # Only show exercises after the final slide
+    if st.session_state.slide_index == len(slides) - 1:
+        generate_exercise_data(module_name)
+        display_exercise(module_name)
+        display_solution(module_name)
