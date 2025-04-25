@@ -81,7 +81,7 @@ def display_exercise(module_name):
         if st.button("🚀 Run My Code"):
             execute_code(draft_code)
 
-def execute_code(draft_code):
+def execute_code(module_name,draft_code):
     st.session_state["last_run_code"] = draft_code  # Save latest version
     output_buffer = io.StringIO()
     try:
@@ -97,10 +97,10 @@ def execute_code(draft_code):
         user_code_valid = False
 
     if user_code_valid:
-        evaluate_solution()
+        evaluate_solution(module_name)
     
 
-def evaluate_solution():
+def evaluate_solution(module_name):
     st.write("Session State: ", st.session_state)
 
     solution_code = st.session_state[f"{module_name}_exercise_data"]["solution"]["code"]
