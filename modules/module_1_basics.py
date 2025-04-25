@@ -108,7 +108,8 @@ def slide_controls():
     # Display slide info and content
     with cols[1]:
         st.markdown(f"#### Slide {current_index + 1} of {len(slides)}")
-
+        
+    fetch_and_cache_explanations()
     display_slide(current_index)
 
 def display_quiz():
@@ -220,7 +221,7 @@ def run():
     module_name = "assigning variables"
     slide_controls()
     st.divider()
-    fetch_and_cache_explanations()
+    
 
     # Only show exercises after the final slide
     if st.session_state.slide_index == len(slides) - 1:
