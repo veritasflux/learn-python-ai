@@ -153,7 +153,7 @@ def execute_code(module_name,draft_code):
         evaluate_solution(module_name)
 
 def evaluate_solution(module_name):
-    solution_code = st.session_state["{module_name}_exercise_data"]["solution"]["code"]
+    solution_code = st.session_state[f"{module_name}_exercise_data"]["solution"]["code"]
     solution_output_buffer = io.StringIO()
     try:
         with contextlib.redirect_stdout(solution_output_buffer):
