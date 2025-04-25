@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 import torch
-from transformers import AutoModelForSeq2SeqLM
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, set_seed
 import soundfile as sf
 
 # Initialize model and tokenizer
