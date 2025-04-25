@@ -14,7 +14,11 @@ def run():
     A **variable** is a way to store information in your program. Think of it as a labeled box where you can keep data.
     
     For example:
-    
+  
+    """)
+
+    st.code("""
+      
     x = 5
     name = "Alice"
     price = 9.99
