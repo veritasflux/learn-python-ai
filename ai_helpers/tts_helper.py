@@ -1,24 +1,21 @@
-# ai_helpers/tts_helper.py
 import os
 from pathlib import Path
+from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, set_seed
 import soundfile as sf
 
-# Initialize model and tokenizer
-device = "cpu"  # Use CPU for inference
-# Load model directly
+# Load Kokoro model and tokenizer
+model_name = "kokoro-tts/kokoro-mini"
+model = AutoModelForCausalLM.from_pretrained(model_name).to("cpu")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = AutoModelForSeq2SeqLM.from_pretrained("parler-tts/parler-tts-mini-expresso")
-tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-expresso")
-
-def text_to_speech(text: str, voice: str = "Thomas", filename: str = "speech.wav") -> str:
+def text_to_speech(text: str, voice: str = "default", filename: str = "speech.wav") -> str:
     """
-    Generate TTS audio using Parler-TTS Mini and save it locally.
+    Generate TTS audio using Kokoro TTS and save it locally.
     
     Args:
         text (str): The text to convert to speech.
-        voice (str): The voice model to use.
+        voice (str): The voice model to use (if applicable).
         filename (str): The output filename.
 
     Returns:
@@ -27,16 +24,14 @@ def text_to_speech(text: str, voice: str = "Thomas", filename: str = "speech.wav
     # Path where the audio will be saved
     speech_file_path = Path(__file__).parent / filename
 
-    # Prepare inputs for Parler TTS
-    description = f"{voice} speaks in a neutral tone."
-    input_ids = tokenizer(description, return_tensors="pt").input_ids.to(device)
-    prompt_input_ids = tokenizer(text, return_tensors="pt").input_ids.to(device)
+    # Tokenize the input text
+    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+    input_ids = inputs.input_ids.to("cpu")
 
     # Generate speech
-    set_seed(42)
     with torch.no_grad():
-        generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
-        audio_arr = generation.cpu().numpy().squeeze()
+        output = model.generate(input_ids)
+        audio_arr = output.cpu().numpy().squeeze()
 
     # Save to WAV file
     sf.write(speech_file_path, audio_arr, model.config.sampling_rate)
