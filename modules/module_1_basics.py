@@ -4,54 +4,89 @@ import io
 import contextlib
 import json
 
-def display_intro():
-    st.title("🧠 Module 1: Python Basics")
-    st.write("Welcome to your first Python lesson! Let's learn about **variables**.")
+slides = [
+    {
+        "title": "🧠 Module 1: Python Basics",
+        "content": """
+Welcome to your first Python lesson! Let's learn about **variables**.
 
-    st.subheader("📘 What is a Variable?")
-    st.markdown("""
-    A **variable** is a way to store information in your program. Think of it as a labeled box where you can keep data.
-    
-    For example:
-    """)
-    st.code("""
-    x = 5
-    name = "Alice"
-    price = 9.99
-    """)
+A **variable** is a way to store information in your program. Think of it as a labeled box where you can keep data.
+""",
+    },
+    {
+        "title": "📦 Examples of Variables",
+        "content": """```python
+x = 5
+name = "Alice"
+price = 9.99
+```""",
+    },
+    {
+        "title": "🔁 Updating a Variable",
+        "content": """```python
+x = 5
+print("Before:", x)
 
-    st.markdown("""📌 Let's update a variable:""")
-    st.code("""
-    x = 5
-    print("Before:", x)
-    
-    x = 10
-    print("After:", x)
-    """)
+x = 10
+print("After:", x)
+```""",
+    },
+    {
+        "title": "💡 Common Mistake",
+        "content": """
+Don't use `=` to compare values. Use `==` for comparison.
 
-    st.info("""Common Mistake
-    Don't use `=` to compare values. Use `==` for comparison.
-    """, icon="💡")
-    st.code("""
-    x = 5    # correct: assigning value
-    if x == 5:  # correct: comparing
-        print("x is 5")
-    """)
+```python
+x = 5    # correct: assigning value
+if x == 5:  # correct: comparing
+    print("x is 5")
+```""",
+    },
+    {
+        "title": "🧠 Quick Quiz",
+        "content": None  # Will display with a function
+    }
+]
+
+def display_slide(index):
+    if 0 <= index < len(slides):
+        slide = slides[index]
+        st.subheader(slide["title"])
+        if slide["content"]:
+            st.markdown(slide["content"])
+        elif slide["title"] == "🧠 Quick Quiz":
+            display_quiz()
+
+def slide_controls():
+    if "slide_index" not in st.session_state:
+        st.session_state.slide_index = 0
+
+    cols = st.columns([1, 5, 1])
+    if cols[0].button("⬅️ Back", disabled=st.session_state.slide_index == 0):
+        st.session_state.slide_index -= 1
+
+    with cols[1]:
+        st.markdown(f"#### Slide {st.session_state.slide_index + 1} of {len(slides)}")
+
+    if cols[2].button("Next ➡️", disabled=st.session_state.slide_index == len(slides) - 1):
+        st.session_state.slide_index += 1
+
+    display_slide(st.session_state.slide_index)
 
 def display_quiz():
-    st.markdown("### 🧠 Quick Quiz")
     quiz_answer = st.radio("Which line correctly assigns a value to a variable?", [
         "x == 10",
         "10 = x",
         "x = 10",
-    ])
+    ], key="quiz_radio")
     
-    if st.button("📝 Check Answer"):
+    if st.button("📝 Check Answer", key="check_quiz_answer"):
         if quiz_answer == "x = 10":
             st.success("Correct! ✅")
         else:
             st.error("Oops! Remember, `=` assigns a value to a variable.")
 
+# Keep the rest of your logic the same
 def generate_exercise_data(module_name):
     if f"{module_name}_exercise_data" not in st.session_state:
         if st.button(f"🎲 Generate New Exercise"):
@@ -77,16 +112,15 @@ def display_exercise(module_name):
             key=f"{module_name}_user_code_input"
         )
 
-        # Handle running code (to be implemented in another function)
         if st.button("🚀 Run My Code"):
-            execute_code(draft_code,module_name)
+            execute_code(draft_code, module_name)
 
-def execute_code(draft_code,module_name):
-    st.session_state["last_run_code"] = draft_code  # Save latest version
+def execute_code(draft_code, module_name):
+    st.session_state["last_run_code"] = draft_code
     output_buffer = io.StringIO()
     try:
         with contextlib.redirect_stdout(output_buffer):
-            exec(draft_code, {})  # Run the updated code
+            exec(draft_code, {})
         st.success("✅ Code ran successfully!")
         st.markdown("**🖥️ Output:**")
         st.code(output_buffer.getvalue().strip())
@@ -98,7 +132,6 @@ def execute_code(draft_code,module_name):
 
     if user_code_valid:
         evaluate_solution(module_name)
-    
 
 def evaluate_solution(module_name):
     solution_code = st.session_state[f"{module_name}_exercise_data"]["solution"]["code"]
@@ -115,11 +148,8 @@ def evaluate_solution(module_name):
 
 def generate_hint(user_code, solution_code):
     with st.spinner("Evaluating your logic..."):
-        # Call the hint generator and get feedback as JSON
         hint_json = hint_generator.generate_hint(user_code, solution_code)
-        
         try:
-            # Parse the response as JSON
             hint_response = json.loads(hint_json)
             is_correct = hint_response.get("is_correct", False)
             feedback = hint_response.get("feedback", "No feedback provided.")
@@ -132,9 +162,7 @@ def generate_hint(user_code, solution_code):
         except json.JSONDecodeError as e:
             st.warning(f"⚠️ Could not evaluate the feedback properly. Error: {str(e)}")
 
-
 def display_solution(module_name):
-    # Check if exercise data exists in session state
     if f"{module_name}_exercise_data" not in st.session_state:
         st.warning(f"⚠️ Exercise data for {module_name} not found. Please generate the exercise first.")
         return
@@ -151,11 +179,8 @@ def display_solution(module_name):
         st.markdown(solution.get("explanation", "No explanation provided."))
 
 def run():
-    # Display all parts of the app
-    display_intro()
-    display_quiz()
-    # Generate exercise for Variables
+    slide_controls()
+    st.divider()
     generate_exercise_data("assigning variables")
     display_exercise("assigning variables")
     display_solution("assigning variables")
-
