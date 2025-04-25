@@ -47,6 +47,7 @@ def generate_hint(user_code, solution_code):
         "model": MODEL_NAME,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.5,
+        "response_format": {"type": "json_object"},
     }
 
     response = requests.post(GROQ_API_URL, headers=headers, json=body)
