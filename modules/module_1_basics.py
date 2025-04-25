@@ -35,15 +35,15 @@ def run():
     print("After:", x)
     """)
 
-    st.info("""
-    💡 **Common Mistake**:  
+    st.info(
+        """💡 **Common Mistake**:  
     Don't use `=` to compare values. Use `==` for comparison.
     
     ```python
     x = 5    # correct: assigning value
     if x == 5:  # correct: comparing
         print("x is 5")
-    """)
+    """ )
     ---
 
     #### 4. **Add a Quick Quiz / Reflection Question**
