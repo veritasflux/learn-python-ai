@@ -57,7 +57,6 @@ def generate_exercise_data(module_name):
         if st.button(f"🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
                 exercise_data = generate_exercises.generate_exercise(module_name)
-                display_solution("assigning variables")
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
                     st.session_state[f"{module_name}_exercise_data"] = exercise_data
                     st.session_state[f"{module_name}_show_solution"] = False
@@ -77,7 +76,7 @@ def display_exercise(module_name):
             height=180,
             key=f"{module_name}_user_code_input"
         )
-
+        display_solution("assigning variables")
         # Handle running code (to be implemented in another function)
         if st.button("🚀 Run My Code"):
             execute_code(draft_code)
@@ -99,6 +98,7 @@ def execute_code(draft_code):
 
     if user_code_valid:
         evaluate_solution()
+    
 
 def evaluate_solution():
     solution_code = st.session_state["exercise_data"]["solution"]["code"]
