@@ -105,29 +105,29 @@ def display_quiz():
         else:
             st.error("Oops! Remember, an integer is a whole number without a decimal.")
 
-def generate_exercise_data():
-    if "exercise_data" not in st.session_state:
-        if st.button("🎲 Generate New Exercise"):
+def generate_exercise_data(module_name):
+    if f"{module_name}_exercise_data" not in st.session_state:
+        if st.button(f"🎲 Generate New Exercise for {module_name}"):
             with st.spinner("Generating exercise..."):
-                exercise_data = generate_exercises.generate_exercise("core_data_types")
+                exercise_data = generate_exercises.generate_exercise(module_name)
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
-                    st.session_state.exercise_data = exercise_data
-                    st.session_state.show_solution = False
-                    st.session_state.user_input = ""
+                    st.session_state[f"{module_name}_exercise_data"] = exercise_data
+                    st.session_state[f"{module_name}_show_solution"] = False
+                    st.session_state[f"{module_name}_user_input"] = ""
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
-
-def display_exercise():
-    if "exercise_data" in st.session_state:
+                    
+def display_exercise(module_name):
+    if f"{module_name}_exercise_data" in st.session_state:
         st.markdown("### 📝 Exercise")
-        st.markdown(st.session_state.exercise_data["question"])
+        st.markdown(st.session_state[f"{module_name}_exercise_data"]["question"])
 
         st.markdown("### ✏️ Try It Out!")
         draft_code = st.text_area(
             "Write your Python code here:",
-            value=st.session_state.get("user_input", ""),
+            value=st.session_state.get(f"{module_name}_user_input", ""),
             height=180,
-            key="user_code_input"
+            key=f"{module_name}_user_code_input"
         )
 
         # Handle running code (to be implemented in another function)
@@ -184,12 +184,12 @@ def generate_hint(user_code, solution_code):
         except json.JSONDecodeError as e:
             st.warning(f"⚠️ Could not evaluate the feedback properly. Error: {str(e)}")
 
-def display_solution():
+def display_solution(module_name):
     if st.button("💡 I Give Up! Show Solution"):
-        st.session_state.show_solution = True
+        st.session_state[f"{module_name}_show_solution"] = True
 
-    if st.session_state.get("show_solution"):
-        solution = st.session_state.exercise_data["solution"]
+    if st.session_state.get(f"{module_name}_show_solution"):
+        solution = st.session_state[f"{module_name}_exercise_data"]["solution"]
         st.markdown("### ✅ Solution Code")
         st.code(solution.get("code", "No code provided."))
 
@@ -203,6 +203,9 @@ def run():
     display_text()
     display_booleans()
     display_quiz()
-    generate_exercise_data()
-    display_exercise()
-    display_solution()
+    
+    # Generate exercise for Core Data Types
+    generate_exercise_data("core_data_types")
+    display_exercise("core_data_types")
+    display_solution("core_data_types")
+    
