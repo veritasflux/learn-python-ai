@@ -52,15 +52,15 @@ def display_quiz():
         else:
             st.error("Oops! Remember, `=` assigns a value to a variable.")
 
-def generate_exercise_data():
-    if "exercise_data" not in st.session_state:
-        if st.button("🎲 Generate New Exercise"):
+def generate_exercise_data(module_name):
+    if f"{module_name}_exercise_data" not in st.session_state:
+        if st.button(f"🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
-                exercise_data = generate_exercises.generate_exercise("variables")
+                exercise_data = generate_exercises.generate_exercise(module_name)
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
-                    st.session_state.exercise_data = exercise_data
-                    st.session_state.show_solution = False
-                    st.session_state.user_input = ""
+                    st.session_state[f"{module_name}_exercise_data"] = exercise_data
+                    st.session_state[f"{module_name}_show_solution"] = False
+                    st.session_state[f"{module_name}_user_input"] = ""
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
@@ -148,6 +148,7 @@ def run():
     # Display all parts of the app
     display_intro()
     display_quiz()
-    generate_exercise_data()
-    display_exercise()
-    display_solution()
+    # Generate exercise for Variables
+    generate_exercise_data("assigning variables")
+    display_exercise("assigning variables")
+    display_solution("assigning variables")
