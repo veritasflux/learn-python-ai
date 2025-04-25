@@ -64,17 +64,17 @@ def generate_exercise_data(module_name):
                 else:
                     st.error("❌ Failed to generate a valid exercise. Please try again.")
 
-def display_exercise():
-    if "exercise_data" in st.session_state:
+def display_exercise(module_name):
+    if f"{module_name}_exercise_data" in st.session_state:
         st.markdown("### 📝 Exercise")
-        st.markdown(st.session_state.exercise_data["question"])
+        st.markdown(st.session_state[f"{module_name}_exercise_data"]["question"])
 
         st.markdown("### ✏️ Try It Out!")
         draft_code = st.text_area(
             "Write your Python code here:",
-            value=st.session_state.get("user_input", ""),
+            value=st.session_state.get(f"{module_name}_user_input", ""),
             height=180,
-            key="user_code_input"
+            key=f"{module_name}_user_code_input"
         )
 
         # Handle running code (to be implemented in another function)
@@ -132,12 +132,12 @@ def generate_hint(user_code, solution_code):
             st.warning(f"⚠️ Could not evaluate the feedback properly. Error: {str(e)}")
 
 
-def display_solution():
+def display_solution(module_name):
     if st.button("💡 I Give Up! Show Solution"):
-        st.session_state.show_solution = True
+        st.session_state[f"{module_name}_show_solution"] = True
 
-    if st.session_state.get("show_solution"):
-        solution = st.session_state.exercise_data["solution"]
+    if st.session_state.get(f"{module_name}_show_solution"):
+        solution = st.session_state[f"{module_name}_exercise_data"]["solution"]
         st.markdown("### ✅ Solution Code")
         st.code(solution.get("code", "No code provided."))
 
