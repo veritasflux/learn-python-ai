@@ -27,6 +27,6 @@ def text_to_speech(text: str, voice: str = "Angelo-PlayAI", filename: str = "spe
     )
 
     with open(speech_file_path, "wb") as f:
-        f.write(response.content)
+        f.write(response.read())
 
     return str(speech_file_path)
