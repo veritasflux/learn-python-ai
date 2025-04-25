@@ -1,5 +1,5 @@
 import streamlit as st
-from ai_helpers import generate_exercises, hint_generator
+from ai_helpers import generate_exercises, hint_generator, generate_slide_explanation
 from ai_helpers.tts_helper import text_to_speech
 import io
 import contextlib
