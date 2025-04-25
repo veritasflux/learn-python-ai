@@ -185,6 +185,11 @@ def generate_hint(user_code, solution_code):
             st.warning(f"⚠️ Could not evaluate the feedback properly. Error: {str(e)}")
 
 def display_solution(module_name):
+    # Check if exercise data exists in session state
+    if f"{module_name}_exercise_data" not in st.session_state:
+        st.warning(f"⚠️ Exercise data for {module_name} not found. Please generate the exercise first.")
+        return
+
     if st.button("💡 I Give Up! Show Solution"):
         st.session_state[f"{module_name}_show_solution"] = True
 
