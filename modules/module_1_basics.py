@@ -59,7 +59,7 @@ def display_slide(index):
 
 def slide_controls():
     if "slide_index" not in st.session_state:
-        st.session_state.slide_index = 1
+        st.session_state.slide_index = 0
 
     cols = st.columns([1, 5, 1])
     if cols[0].button("⬅️ Back", disabled=st.session_state.slide_index == 0):
