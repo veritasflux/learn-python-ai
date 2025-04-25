@@ -38,7 +38,7 @@ def run():
     f"**💡 Common Mistake**"
     f"Don't use `=` to compare values. Use `==` for comparison."
     
-    ```python
+
     x = 5    # correct: assigning value
     if x == 5:  # correct: comparing
         print("x is 5")
@@ -46,7 +46,6 @@ def run():
 
     #### 4. **Add a Quick Quiz / Reflection Question**
     
-    ```python
     st.markdown("### 🧠 Quick Quiz")
     quiz_answer = st.radio("Which line correctly assigns a value to a variable?", [
         "x == 10",
