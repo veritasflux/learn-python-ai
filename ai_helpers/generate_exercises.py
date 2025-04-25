@@ -6,6 +6,31 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # set this in your environment or .env
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL_NAME = "llama3-70b-8192"
 
+def generate_debugging_prompt(topic, difficulty="beginner"):
+    return rf"""
+    Create a {difficulty} Python debugging challenge about {topic}.
+    
+    Instructions:
+    - Write a short, simple buggy code snippet (maximum 8 lines).
+    - Clearly specify what the code is *intended to do*.
+    - Include a detailed explanation of what the bug is and how to fix it.
+    - Ensure the bug is syntactic, logical, or related to common mistakes.
+    - Avoid `import` and `input()`.
+
+    Format your response as a single valid JSON object like this:
+
+    {{
+        "question": "Brief description of what the code is supposed to do.",
+        "buggy_code": "The Python code with a mistake. Escape characters properly.",
+        "solution": {{
+            "code": "Corrected version of the code.",
+            "explanation": "Why the original code failed and how the fix works."
+        }}
+    }}
+
+    Do not include anything outside of the JSON object. It must be parseable with json.loads().
+    """
+
 def generate_prompt(topic, difficulty="beginner"):
     # Modify the prompt to instruct the model to return the exercise in JSON format
     return rf"""
@@ -57,3 +82,8 @@ def get_ai_response(prompt):
 def generate_exercise(topic):
     prompt = generate_prompt(topic)
     return get_ai_response(prompt)
+
+def generate_debugging_exercise(topic, difficulty="beginner"):
+    prompt = generate_debugging_prompt(topic, difficulty)
+    return get_ai_response(prompt)
+
