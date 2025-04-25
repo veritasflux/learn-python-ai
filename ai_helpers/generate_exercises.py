@@ -12,9 +12,8 @@ def generate_prompt(topic, difficulty="beginner"):
     Create a {difficulty} Python exercise about {topic}. 
     Make the question dynamic and fresh each time:
     - Randomize variable values or names
-    - Stick with the {topic} assignment, avoid multiple operations
     - Use small real-world contexts
-    - Avoid exercises with imports
+    - Avoid exercises with imports and input function
     - Always give detailed specifications (number, price, quantity, size ...)
     Your response MUST be a single, valid JSON object starting with {{ and ending with }}. Do not include any text before or after the JSON object.
     Adhere strictly to the following JSON structure:
