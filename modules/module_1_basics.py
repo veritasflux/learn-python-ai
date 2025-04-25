@@ -62,7 +62,7 @@ def display_slide(index):
         if st.button("🔊 Read this slide"):
             st.info("Generating audio...")
 
-            file_path = text_to_speech(slide_text, filename=f"slide_{index}.wav")
+            file_path = text_to_speech(slide["content"], filename=f"slide_{index}.wav")
             audio_bytes = open(file_path, 'rb').read()
             st.audio(audio_bytes, format="audio/wav")
 
