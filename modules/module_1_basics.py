@@ -57,6 +57,7 @@ def generate_exercise_data(module_name):
         if st.button(f"🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
                 exercise_data = generate_exercises.generate_exercise(module_name)
+                display_solution("assigning variables")
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
                     st.session_state[f"{module_name}_exercise_data"] = exercise_data
                     st.session_state[f"{module_name}_show_solution"] = False
@@ -151,4 +152,4 @@ def run():
     # Generate exercise for Variables
     generate_exercise_data("assigning variables")
     display_exercise("assigning variables")
-    display_solution("assigning variables")
+
