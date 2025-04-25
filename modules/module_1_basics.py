@@ -20,7 +20,7 @@ def run():
     name = "Alice"
     price = 9.99
     """)
-    ---
+
 
     #### 2. **Visual Output for Variable Values**
     
@@ -44,7 +44,6 @@ def run():
     if x == 5:  # correct: comparing
         print("x is 5")
     """)
-    ---
 
     #### 4. **Add a Quick Quiz / Reflection Question**
     
