@@ -79,9 +79,9 @@ def display_exercise(module_name):
 
         # Handle running code (to be implemented in another function)
         if st.button("🚀 Run My Code"):
-            execute_code(draft_code)
+            execute_code(draft_code,module_name)
 
-def execute_code(module_name,draft_code):
+def execute_code(draft_code,module_name):
     st.session_state["last_run_code"] = draft_code  # Save latest version
     output_buffer = io.StringIO()
     try:
