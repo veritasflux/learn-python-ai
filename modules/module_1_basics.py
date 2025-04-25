@@ -116,10 +116,14 @@ def generate_hint(user_code, solution_code):
     with st.spinner("Evaluating your logic..."):
         # Call the hint generator and get feedback as JSON
         hint_json = hint_generator.generate_hint(user_code, solution_code)
-
+        
+        # Print the raw hint JSON for debugging purposes
+        st.write("Raw hint JSON:", hint_json)
+        
         try:
             # Parse the response as JSON
             hint_response = json.loads(hint_json)
+            st.write("Parsed hint response:", hint_response)  # For debug purposes
             is_correct = hint_response.get("is_correct", False)
             feedback = hint_response.get("feedback", "No feedback provided.")
             
@@ -128,9 +132,9 @@ def generate_hint(user_code, solution_code):
                 st.info(f"💡 Hint: {feedback}")
             else:
                 st.info(f"💡 Hint: {feedback}")
-        except json.JSONDecodeError:
-            st.warning("⚠️ Could not evaluate the feedback properly.")
-            st.code(hint_json)  # Show raw response for debugging
+        except json.JSONDecodeError as e:
+            st.warning(f"⚠️ Could not evaluate the feedback properly. Error: {str(e)}")
+
 
 def display_solution():
     if st.button("💡 I Give Up! Show Solution"):
