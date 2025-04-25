@@ -17,7 +17,7 @@ def generate_batch_explanation(slides):
     slide_contents = "\n\n".join([f"Slide {index+1}: {slide['content']}" for index, slide in enumerate(slides)])
     
     prompt = f"""
-    You are an expert Python teacher. For each slide, provide a detailed, beginner-friendly explanation of the content. Keep it brief.
+    You are an expert Python teacher. For each slide, provide a detailed, beginner-friendly explanation of the content. Make it fun.
     The slides are:
     
     {slide_contents}
