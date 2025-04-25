@@ -15,7 +15,6 @@ def run():
     
     For example:
     
-    ```python
     x = 5
     name = "Alice"
     price = 9.99
@@ -24,7 +23,7 @@ def run():
 
     #### 2. **Visual Output for Variable Values**
     
-    ```python
+
     st.markdown("""📌 Let's update a variable:""")
     
     st.code("""
