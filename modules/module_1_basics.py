@@ -71,9 +71,17 @@ def display_slide(index):
             # Get the explanation from the cache
             explanation = cached_explanations.get(f"Slide {index+1}", "No explanation available.")
             st.markdown(f"### 📝 Detailed Explanation\n{explanation}")
-            # Convert explanation to speech
-            speech_path = tts_helper.text_to_speech(explanation)
-            st.audio(speech_path)
+            
+            # Add a button to trigger TTS and play the explanation
+            if st.button(f"🔊 Read Slide {index + 1}"):
+                st.info("Generating audio...")
+                
+                # Generate speech from the explanation and save it as a file
+                file_path = tts_helper.text_to_speech(explanation, filename=f"slide_{index}.wav")
+                
+                # Read the generated audio file and play it
+                audio_bytes = open(file_path, 'rb').read()
+                st.audio(audio_bytes, format="audio/wav")
         elif slide["title"] == "🧠 Quick Quiz":
             display_quiz()
             
