@@ -4,7 +4,7 @@ import json
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # set this in your environment or .env file
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-MODEL_NAME = "llama3-8b-8192"
+MODEL_NAME = "llama3-70b-8192"
 
 def generate_prompt(topic, difficulty="beginner"):
     # Modify the prompt to instruct the model to return the exercise in JSON format
