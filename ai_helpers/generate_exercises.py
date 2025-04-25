@@ -13,6 +13,8 @@ def generate_prompt(topic, difficulty="beginner"):
     Make the question dynamic and fresh each time:
     - Randomize variable values or names
     - Use small real-world contexts
+    - Avoid exercises with imports
+    - Always give detailed specifications (number, price, quantity, size ...)
     Your response MUST be a single, valid JSON object starting with {{ and ending with }}. Do not include any text before or after the JSON object.
     Adhere strictly to the following JSON structure:
     
