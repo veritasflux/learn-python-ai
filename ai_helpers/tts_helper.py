@@ -1,13 +1,20 @@
 # ai_helpers/tts_helper.py
 import os
 from pathlib import Path
-from groq import Groq
+import torch
+from parler_tts import ParlerTTSForConditionalGeneration
+from transformers import AutoTokenizer, set_seed
+import soundfile as sf
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# Initialize model and tokenizer
+device = "cpu"  # Use CPU for inference
 
-def text_to_speech(text: str, voice: str = "Angelo-PlayAI", filename: str = "speech.wav") -> str:
+model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-expresso").to(device)
+tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-expresso")
+
+def text_to_speech(text: str, voice: str = "Thomas", filename: str = "speech.wav") -> str:
     """
-    Generate TTS audio using Groq and save it locally.
+    Generate TTS audio using Parler-TTS Mini and save it locally.
     
     Args:
         text (str): The text to convert to speech.
@@ -17,16 +24,21 @@ def text_to_speech(text: str, voice: str = "Angelo-PlayAI", filename: str = "spe
     Returns:
         str: The path to the saved audio file.
     """
+    # Path where the audio will be saved
     speech_file_path = Path(__file__).parent / filename
 
-    response = client.audio.speech.create(
-        model="playai-tts",
-        voice=voice,
-        response_format="wav",
-        input=text,
-    )
+    # Prepare inputs for Parler TTS
+    description = f"{voice} speaks in a neutral tone."
+    input_ids = tokenizer(description, return_tensors="pt").input_ids.to(device)
+    prompt_input_ids = tokenizer(text, return_tensors="pt").input_ids.to(device)
 
-    with open(speech_file_path, "wb") as f:
-        f.write(response.read())
+    # Generate speech
+    set_seed(42)
+    with torch.no_grad():
+        generation = model.generate(input_ids=input_ids, prompt_input_ids=prompt_input_ids)
+        audio_arr = generation.cpu().numpy().squeeze()
+
+    # Save to WAV file
+    sf.write(speech_file_path, audio_arr, model.config.sampling_rate)
 
     return str(speech_file_path)
