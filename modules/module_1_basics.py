@@ -25,17 +25,17 @@ def run():
     #### 2. **Visual Output for Variable Values**
     
     ```python
-    st.markdown("📌 Let's update a variable:")
+    st.markdown("""📌 Let's update a variable:""")
     
-    st.code("
+    st.code("""
     x = 5
     print("Before:", x)
     
     x = 10
     print("After:", x)
-    ")
+    """)
 
-    st.info("
+    st.info("""
     f"**💡 Common Mistake**"
     f"Don't use `=` to compare values. Use `==` for comparison."
     
@@ -43,7 +43,7 @@ def run():
     x = 5    # correct: assigning value
     if x == 5:  # correct: comparing
         print("x is 5")
-    ")
+    """)
     ---
 
     #### 4. **Add a Quick Quiz / Reflection Question**
