@@ -101,6 +101,8 @@ def execute_code(draft_code):
     
 
 def evaluate_solution():
+    st.write("Session State: ", st.session_state)
+
     solution_code = st.session_state[f"{module_name}_exercise_data"]["solution"]["code"]
     solution_output_buffer = io.StringIO()
     try:
