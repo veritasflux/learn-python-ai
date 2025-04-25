@@ -89,6 +89,11 @@ def slide_controls():
     if "slide_index" not in st.session_state:
         st.session_state.slide_index = 0
 
+    # Only call fetch_and_cache_explanations once at the start or when the lesson is initialized
+    if "explanations_cached" not in st.session_state:
+        fetch_and_cache_explanations()
+        st.session_state["explanations_cached"] = True
+
     cols = st.columns([1, 5, 1])
 
     # Read current index
@@ -108,9 +113,9 @@ def slide_controls():
     # Display slide info and content
     with cols[1]:
         st.markdown(f"#### Slide {current_index + 1} of {len(slides)}")
-        
-    fetch_and_cache_explanations()
+
     display_slide(current_index)
+
 
 def display_quiz():
     quiz_answer = st.radio("Which line correctly assigns a value to a variable?", [
