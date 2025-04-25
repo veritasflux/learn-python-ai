@@ -130,6 +130,7 @@ def generate_hint(user_code, solution_code):
                 st.info(f"💡 Hint: {feedback}")
         except json.JSONDecodeError:
             st.warning("⚠️ Could not evaluate the feedback properly.")
+            st.code(hint_json)  # Show raw response for debugging
 
 def display_solution():
     if st.button("💡 I Give Up! Show Solution"):
