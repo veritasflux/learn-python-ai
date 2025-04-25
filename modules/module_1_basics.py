@@ -62,16 +62,24 @@ def slide_controls():
         st.session_state.slide_index = 0
 
     cols = st.columns([1, 5, 1])
-    if cols[0].button("⬅️ Back", disabled=st.session_state.slide_index == 0):
-        st.session_state.slide_index -= 1
+
+    # Temporary variables to hold changes before rendering
+    prev_index = st.session_state.slide_index
+
+    if cols[0].button("⬅️ Back", disabled=prev_index == 0):
+        prev_index -= 1
+
+    if cols[2].button("Next ➡️", disabled=prev_index == len(slides) - 1):
+        prev_index += 1
+
+    # Update session state only once
+    st.session_state.slide_index = prev_index
 
     with cols[1]:
-        st.markdown(f"#### Slide {st.session_state.slide_index + 1} of {len(slides)}")
+        st.markdown(f"#### Slide {prev_index + 1} of {len(slides)}")
 
-    if cols[2].button("Next ➡️", disabled=st.session_state.slide_index == len(slides) - 1):
-        st.session_state.slide_index += 1
+    display_slide(prev_index)
 
-    display_slide(st.session_state.slide_index)
 
 def display_quiz():
     quiz_answer = st.radio("Which line correctly assigns a value to a variable?", [
