@@ -2,14 +2,14 @@
 import os
 from pathlib import Path
 import torch
-from parler_tts import ParlerTTSForConditionalGeneration
-from transformers import AutoTokenizer, set_seed
+from transformers import AutoModelForSeq2SeqLM
 import soundfile as sf
 
 # Initialize model and tokenizer
 device = "cpu"  # Use CPU for inference
+# Load model directly
 
-model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-expresso").to(device)
+model = AutoModelForSeq2SeqLM.from_pretrained("parler-tts/parler-tts-mini-expresso")
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-expresso")
 
 def text_to_speech(text: str, voice: str = "Thomas", filename: str = "speech.wav") -> str:
