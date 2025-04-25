@@ -35,8 +35,8 @@ def run():
     """)
 
     st.info("""
-    ** Common Mistake**"
-    Don't use `=` to compare values. Use `==` for comparison."
+    ** Common Mistake**
+    Don't use `=` to compare values. Use `==` for comparison.
     
 
     x = 5    # correct: assigning value
