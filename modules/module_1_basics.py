@@ -35,14 +35,14 @@ def run():
     """)
 
     st.info("""
-    #Common Mistake
+    Common Mistake
     Don't use `=` to compare values. Use `==` for comparison.
-    
-
+    """, icon = "💡")
+    st.code("""
     x = 5    # correct: assigning value
     if x == 5:  # correct: comparing
         print("x is 5")
-    """, icon = "💡")
+    """)
 
     #### 4. **Add a Quick Quiz / Reflection Question**
     
