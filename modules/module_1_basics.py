@@ -50,22 +50,35 @@ if x == 5:  # correct: comparing
     }
 ]
 
+# Cache the explanations in a dictionary
+cached_explanations = {}
+fetch_and_cache_explanations()
+
+def fetch_and_cache_explanations():
+    """
+    Fetches all slide explanations at the start of the lesson and caches them.
+    """
+    global cached_explanations
+    cached_explanations = generate_slide_explanation.fetch_slide_explanations(slides)
+    
 def display_slide(index):
+    """
+    Display the content and explanation of a specific slide.
+    """
     if 0 <= index < len(slides):
         slide = slides[index]
         st.subheader(slide["title"])
         if slide["content"]:
             st.markdown(slide["content"])
+            # Get the explanation from the cache
+            explanation = cached_explanations.get(f"Slide {index+1}", "No explanation available.")
+            st.markdown(f"### 📝 Detailed Explanation\n{explanation}")
+            # Convert explanation to speech
+            speech_path = tts_helper.text_to_speech(explanation)
+            st.audio(speech_path)
         elif slide["title"] == "🧠 Quick Quiz":
             display_quiz()
-        # Add a button to trigger TTS
-        if st.button("🔊 Read this slide"):
-            st.info("Generating audio...")
-
-            file_path = text_to_speech(slide["content"], filename=f"slide_{index}.wav")
-            audio_bytes = open(file_path, 'rb').read()
-            st.audio(audio_bytes, format="audio/wav")
-
+            
 def slide_controls():
     if "slide_index" not in st.session_state:
         st.session_state.slide_index = 0
