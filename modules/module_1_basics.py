@@ -76,7 +76,7 @@ def display_exercise(module_name):
             height=180,
             key=f"{module_name}_user_code_input"
         )
-        display_solution("assigning variables")
+
         # Handle running code (to be implemented in another function)
         if st.button("🚀 Run My Code"):
             execute_code(draft_code)
@@ -152,4 +152,5 @@ def run():
     # Generate exercise for Variables
     generate_exercise_data("assigning variables")
     display_exercise("assigning variables")
+    display_solution("assigning variables")
 
