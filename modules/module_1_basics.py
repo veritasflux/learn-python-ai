@@ -50,7 +50,7 @@ if x == 5:  # correct: comparing
 
 def display_slide(index):
     if 0 <= index < len(slides):
-        slide = slides[index - 1]
+        slide = slides[index]
         st.subheader(slide["title"])
         if slide["content"]:
             st.markdown(slide["content"])
