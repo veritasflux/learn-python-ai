@@ -23,7 +23,6 @@ def run():
     ---
 
     #### 2. **Visual Output for Variable Values**
-    Show how the variable changes over time to make it more intuitive:
     
     ```python
     st.markdown("📌 Let's update a variable:")
@@ -44,11 +43,10 @@ def run():
     x = 5    # correct: assigning value
     if x == 5:  # correct: comparing
         print("x is 5")
-
+    """)
     ---
 
     #### 4. **Add a Quick Quiz / Reflection Question**
-    Introduce 1-2 short MCQs to reinforce the topic:
     
     ```python
     st.markdown("### 🧠 Quick Quiz")
