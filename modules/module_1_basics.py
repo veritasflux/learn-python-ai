@@ -10,8 +10,59 @@ def run():
     st.write("Welcome to your first Python lesson! Let's learn about **variables**.")
 
     st.subheader("📘 What is a Variable?")
-    st.code("x = 5\nprint(x)")
+    st.markdown("""
+    A **variable** is a way to store information in your program. Think of it as a labeled box where you can keep data.
+    
+    For example:
+    
+    ```python
+    x = 5
+    name = "Alice"
+    price = 9.99
 
+    ---
+
+    #### 2. **Visual Output for Variable Values**
+    Show how the variable changes over time to make it more intuitive:
+    
+    ```python
+    st.markdown("📌 Let's update a variable:")
+    
+    st.code("""
+    x = 5
+    print("Before:", x)
+    
+    x = 10
+    print("After:", x)
+    """)
+
+    st.info("""
+    💡 **Common Mistake**:
+    Don't use `=` to compare values. Use `==` for comparison.
+    
+    ```python
+    x = 5    # correct: assigning value
+    if x == 5:  # correct: comparing
+        print("x is 5")
+
+    ---
+
+    #### 4. **Add a Quick Quiz / Reflection Question**
+    Introduce 1-2 short MCQs to reinforce the topic:
+    
+    ```python
+    st.markdown("### 🧠 Quick Quiz")
+    quiz_answer = st.radio("Which line correctly assigns a value to a variable?", [
+        "x == 10",
+        "10 = x",
+        "x = 10",
+    ])
+    
+    if st.button("📝 Check Answer"):
+        if quiz_answer == "x = 10":
+            st.success("Correct! ✅")
+        else:
+            st.error("Oops! Remember, `=` assigns a value to a variable.")
     st.divider()
     st.subheader("🧪 Practice Time!")
 
