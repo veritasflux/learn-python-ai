@@ -12,6 +12,7 @@ def generate_prompt(topic, difficulty="beginner"):
     Create a {difficulty} Python exercise about {topic}. 
     Make the question dynamic and fresh each time:
     - Randomize variable values or names
+    - Stick with the {topic} assignment, avoid multiple operations
     - Use small real-world contexts
     - Avoid exercises with imports
     - Always give detailed specifications (number, price, quantity, size ...)
