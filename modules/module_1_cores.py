@@ -107,7 +107,7 @@ def display_quiz():
 
 def generate_exercise_data(module_name):
     if f"{module_name}_exercise_data" not in st.session_state:
-        if st.button(f"🎲 Generate New Exercise for {module_name}"):
+        if st.button(f"🎲 Generate New Exercise"):
             with st.spinner("Generating exercise..."):
                 exercise_data = generate_exercises.generate_exercise(module_name)
                 if isinstance(exercise_data, dict) and "question" in exercise_data and "solution" in exercise_data:
@@ -205,7 +205,7 @@ def run():
     display_quiz()
     
     # Generate exercise for Core Data Types
-    generate_exercise_data("core_data_types")
-    display_exercise("core_data_types")
-    display_solution("core_data_types")
+    generate_exercise_data("core_data_types_string_integers_floats_booleans")
+    display_exercise("core_data_types_string_integers_floats_booleans")
+    display_solution("core_data_types_string_integers_floats_booleans")
     
