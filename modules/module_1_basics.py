@@ -36,7 +36,7 @@ def run():
     """)
 
     st.info("""
-    💡 **Common Mistake**:
+    f"""💡 **Common Mistake**: """
     Don't use `=` to compare values. Use `==` for comparison.
     
     ```python
