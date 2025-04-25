@@ -132,9 +132,9 @@ def display_exercise(module_name):
 
         # Handle running code (to be implemented in another function)
         if st.button("🚀 Run My Code"):
-            execute_code(draft_code)
+            execute_code(module_name,draft_code)
 
-def execute_code(draft_code):
+def execute_code(module_name,draft_code):
     st.session_state["last_run_code"] = draft_code  # Save latest version
     output_buffer = io.StringIO()
     try:
@@ -150,10 +150,10 @@ def execute_code(draft_code):
         user_code_valid = False
 
     if user_code_valid:
-        evaluate_solution()
+        evaluate_solution(module_name)
 
-def evaluate_solution():
-    solution_code = st.session_state["exercise_data"]["solution"]["code"]
+def evaluate_solution(module_name):
+    solution_code = st.session_state["{module_name}_exercise_data"]["solution"]["code"]
     solution_output_buffer = io.StringIO()
     try:
         with contextlib.redirect_stdout(solution_output_buffer):
