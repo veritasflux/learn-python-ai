@@ -1,6 +1,6 @@
 
 import streamlit as st
-from modules import *
+from modules import module_1_basics, module_1_cores
 
 st.sidebar.title("Python Learning Platform")
 module = st.sidebar.radio("Choose a Module", [
