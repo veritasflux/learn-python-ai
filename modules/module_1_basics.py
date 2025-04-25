@@ -1,8 +1,10 @@
 import streamlit as st
 from ai_helpers import generate_exercises, hint_generator
+from ai_helpers.tts_helper import text_to_speech
 import io
 import contextlib
 import json
+import base64
 
 slides = [
     {
@@ -56,6 +58,13 @@ def display_slide(index):
             st.markdown(slide["content"])
         elif slide["title"] == "🧠 Quick Quiz":
             display_quiz()
+        # Add a button to trigger TTS
+        if st.button("🔊 Read this slide"):
+            st.info("Generating audio...")
+
+            file_path = text_to_speech(slide_text, filename=f"slide_{index}.wav")
+            audio_bytes = open(file_path, 'rb').read()
+            st.audio(audio_bytes, format="audio/wav")
 
 def slide_controls():
     if "slide_index" not in st.session_state:
