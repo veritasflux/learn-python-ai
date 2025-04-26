@@ -49,8 +49,6 @@ if x == 5:  # correct: comparing
     }
 ]
 
-# Cache the explanations in a dictionary
-cached_explanations = {}
 
 def fetch_and_cache_explanations():
     """
