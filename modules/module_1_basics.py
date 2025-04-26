@@ -88,8 +88,8 @@ def slide_controls():
         st.session_state.slide_index = 0
 
     # Only call fetch_and_cache_explanations once at the start or when the lesson is initialized
-    if "cached_explanations" not in st.session_state:
-        fetch_and_cache_explanations()
+    """if "cached_explanations" not in st.session_state:
+        fetch_and_cache_explanations()"""
 
     cols = st.columns([1, 5, 1])
 
