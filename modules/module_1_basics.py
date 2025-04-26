@@ -56,8 +56,8 @@ def fetch_and_cache_explanations():
     """
     Fetches all slide explanations at the start of the lesson and caches them.
     """
-    global cached_explanations
-    cached_explanations = generate_slide_explanation.fetch_slide_explanations(slides)
+    explanations = generate_slide_explanation.fetch_slide_explanations(slides)
+    st.session_state["cached_explanations"] = explanations
 
 def display_slide(index):
     """
@@ -69,7 +69,7 @@ def display_slide(index):
         if slide["content"]:
             st.markdown(slide["content"])
             # Get the explanation from the cache
-            explanation = cached_explanations.get(f"Slide {index+1}", "No explanation available.")
+            explanation = st.session_state.get("cached_explanations", {}).get(f"Slide {index+1}", "No explanation available.")
             st.markdown(f"### 📝 Detailed Explanation\n{explanation}")
             
             # Add a button to trigger TTS and play the explanation
@@ -90,9 +90,8 @@ def slide_controls():
         st.session_state.slide_index = 0
 
     # Only call fetch_and_cache_explanations once at the start or when the lesson is initialized
-    if "explanations_cached" not in st.session_state:
-        fetch_and_cache_explanations()
-        st.session_state["explanations_cached"] = True
+    if "cached_explanations" not in st.session_state:
+    fetch_and_cache_explanations()
 
     cols = st.columns([1, 5, 1])
 
