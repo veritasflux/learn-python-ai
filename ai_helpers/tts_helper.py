@@ -1,39 +1,29 @@
+# ai_helpers/tts_fairseq.py
+
 import os
-from pathlib import Path
-from transformers import AutoModelForCausalLM, AutoTokenizer
+import streamlit as st
 import torch
 import soundfile as sf
+from pathlib import Path
+from fairseq.checkpoint_utils import load_model_ensemble_and_task_from_hf_hub
+from fairseq.models.text_to_speech.hub_interface import TTSHubInterface
 
-# Load model and tokenizer from Hugging Face
-model_name = "facebook/fastspeech2-en-ljspeech"
-model = AutoModelForCausalLM.from_pretrained(model_name).to("cpu")
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+@st.cache_resource
+def load_fairseq_model():
+    models, cfg, task = load_model_ensemble_and_task_from_hf_hub(
+        "facebook/fastspeech2-en-ljspeech",
+        arg_overrides={"vocoder": "hifigan", "fp16": False}
+    )
+    model = models[0]
+    TTSHubInterface.update_cfg_with_data_cfg(cfg, task.data_cfg)
+    generator = task.build_generator(model, cfg)
+    return model, cfg, task, generator
 
-def text_to_speech(text: str, voice: str = "default", filename: str = "speech.wav") -> str:
-    """
-    Generate TTS audio using FastSpeech2 and save it locally.
-    
-    Args:
-        text (str): The text to convert to speech.
-        voice (str): The voice model to use (if applicable).
-        filename (str): The output filename.
+def text_to_speech_fairseq(text: str, filename: str = "speech.wav") -> str:
+    model, cfg, task, generator = load_fairseq_model()
+    sample = TTSHubInterface.get_model_input(task, text)
+    wav, rate = TTSHubInterface.get_prediction(task, model, generator, sample)
 
-    Returns:
-        str: The path to the saved audio file.
-    """
-    # Path where the audio will be saved
-    speech_file_path = Path(__file__).parent / filename
-
-    # Tokenize the input text
-    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
-    input_ids = inputs.input_ids.to("cpu")
-
-    # Generate speech
-    with torch.no_grad():
-        output = model.generate(input_ids)
-        audio_arr = output.cpu().numpy().squeeze()
-
-    # Save to WAV file
-    sf.write(speech_file_path, audio_arr, model.config.sampling_rate)
-
-    return str(speech_file_path)
+    output_path = Path(__file__).parent / filename
+    sf.write(str(output_path), wav, rate)
+    return str(output_path)
