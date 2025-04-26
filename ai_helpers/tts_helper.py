@@ -4,14 +4,14 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import soundfile as sf
 
-# Load Kokoro model and tokenizer
-model_name = "kokoro-tts/kokoro-mini"
+# Load model and tokenizer from Hugging Face
+model_name = "facebook/fastspeech2-en-ljspeech"
 model = AutoModelForCausalLM.from_pretrained(model_name).to("cpu")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 def text_to_speech(text: str, voice: str = "default", filename: str = "speech.wav") -> str:
     """
-    Generate TTS audio using Kokoro TTS and save it locally.
+    Generate TTS audio using FastSpeech2 and save it locally.
     
     Args:
         text (str): The text to convert to speech.
