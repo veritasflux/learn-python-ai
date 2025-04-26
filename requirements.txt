@@ -4,4 +4,4 @@ transformers
 openai
 groq
 soundfile
-parler-tts
+fairseq
