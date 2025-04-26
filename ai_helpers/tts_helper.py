@@ -5,7 +5,7 @@ import streamlit as st
 from pathlib import Path
 
 @st.cache_data(show_spinner="🔊 Generating speech...")
-def text_to_speech_opentts(text: str, lang: str = "en", voice: str = "en-us", filename: str = "speech.wav") -> str:
+def text_to_speech(text: str, lang: str = "en", voice: str = "en-us", filename: str = "speech.wav") -> str:
     """
     Convert text to speech using OpenTTS API and save the result.
 
